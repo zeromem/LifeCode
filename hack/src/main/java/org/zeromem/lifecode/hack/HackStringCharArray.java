@@ -15,6 +15,7 @@ public class HackStringCharArray {
 		System.out.println(s.hashCode());
 		System.out.println("-------------");
 
+		// use getDeclaredField, not getField!
 		Field cs = String.class.getDeclaredField("value");
 		cs.setAccessible(true);
 		cs.set(s, new char[]{'a', 'b', 'c', 'd'});
