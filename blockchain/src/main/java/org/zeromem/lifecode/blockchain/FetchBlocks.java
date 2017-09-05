@@ -15,9 +15,9 @@ public class FetchBlocks {
 		Web3j web = Web3j.build(new HttpService("http://10.9.59.138:18001"));
 		Observable<Transaction> observable = web.transactionObservable();
 		observable.subscribe(transaction -> {
-			System.out.println(transaction);
 			System.out.println(transaction.getBlockNumber());
 			System.out.println(transaction.getTransactionIndex());
+			System.out.println(transaction.getInput());
 		});
 	}
 }
