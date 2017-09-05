@@ -16,5 +16,6 @@ public class FileDigest {
 		fis.close();
 		System.out.println(digest);
 		System.out.println(System.currentTimeMillis() - start);
+
 	}
 }

@@ -1,4 +1,4 @@
-package org.zeromem.lifecode.hack;
+package org.zeromem.lifecode.hack.reflect;
 
 
 import java.lang.reflect.Field;
