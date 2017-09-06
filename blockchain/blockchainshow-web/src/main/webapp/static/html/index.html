@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑", serif;
+        }
+
+        #allmap {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+    <script src="/static/js/jquery.js"></script>
+    <title>基于区块链的数字资产交易和过程追踪服务</title>
+</head>
+
+<body>
+<h2>基于区块链的数字资产交易和过程追踪服务</h2>
+<div>
+    <input value="昵称" title="昵称" id="nickname">
+    <input value="密码" title="密码" id="password">
+
+    <button id="login">登录</button>
+    <button id="register">注册</button>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $("#login").click(function () {
+        var nickname = $("#nickname").val();
+        var password = $("#password").val();
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: '/account/get',
+            data: {nickname: nickname, password: password},
+            asyn: false,
+            success: function (data) {
+                console.log(data);
+                var account = data["account"];
+                if (account != undefined && account != "") {
+                    window.localStorage.setItem("account", account);
+                    window.location.href = "/static/html/token.html";
+                } else {
+                    var error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b, c) {
+                alert("ERROR: " + b);
+            }
+        });
+    });
+</script>
