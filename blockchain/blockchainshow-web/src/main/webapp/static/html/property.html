@@ -17,14 +17,18 @@
 <label for="propId">资产编号:</label><input type="text" id="propId">
 <input type="button" id="search" value="搜索">
 <input type="button" id="upload" value="上传">
-<input type="text" value="转让账号" id="to" title="转让账号" onfocus="if ($(this).val() === '转让账号') $(this).val('')" onblur="if ($(this).val() === '') $(this).val('转让账号')">
+<input type="text" value="转让账号" id="to" title="转让账号"
+       onfocus="if ($(this).val() === this.title) $(this).val('');"
+       onblur="if ($(this).val() === '') $(this).val(this.title)">
+
 <input type="button" id="transfer" value="转让">
 <br>
 
 <div>
-<label for="ownerList">流转记录:</label><br>
-<textarea id="ownerList" style="width: 500px; height: 100px;"></textarea>
-<br>
+    <label for="ownerList">流转记录:</label><br>
+    <textarea id="ownerList" style="width: 500px; height: 100px;"></textarea>
+    <br>
+    <label id="hint" style="display: none">操作中...</label>
 </div>
 
 <div>
@@ -36,6 +40,7 @@
 
     // search.
     $("#search").click(function () {
+        $("#hint").show();
         $.ajax({
             type: "get",
             dataType: "json",
@@ -51,16 +56,19 @@
                     const error = data["error"];
                     alert(error);
                 }
+                $("#hint").hide();
             },
             error: function (data, b) {
                 console.log(b);
                 alert("ERROR: " + b);
+                $("#hint").hide();
             }
         });
     });
 
     // upload.
     $("#upload").click(function () {
+        $("#hint").show();
         $.ajax({
             type: "post",
             dataType: "json",
@@ -77,10 +85,12 @@
                     const error = data["error"];
                     alert(error);
                 }
+                $("#hint").hide();
             },
             error: function (data, b) {
                 console.log(b);
                 alert("ERROR: " + b);
+                $("#hint").hide();
             }
         });
     });

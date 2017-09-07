@@ -19,8 +19,13 @@
 <a href="/">返回主页</a>
 <h2>基于区块链的数字资产交易和过程追踪服务原型系统</h2>
 <div>
-    <input value="昵称" title="昵称" id="nickname">
-    <input value="密码" title="密码" id="password">
+    <input value="昵称" title="昵称" id="nickname"
+           onfocus="if ($(this).val() === this.title) $(this).val('');"
+           onblur="if ($(this).val() === '') $(this).val(this.title);">
+
+    <input value="密码" title="密码" id="password"
+           onfocus="if ($(this).val() === this.title) $(this).val('');"
+           onblur="if ($(this).val() === '') $(this).val(this.title);">
 
     <button id="login">登录</button>
     <button id="register">注册</button>
@@ -36,6 +41,35 @@
             type: "post",
             dataType: "json",
             url: '/account/get',
+            data: {nickname: nickname, password: password},
+            asyn: false,
+            success: function (data) {
+                console.log(data);
+                const account = data["account"];
+                if (account !== undefined && account !== "") {
+                    window.localStorage.setItem("account", account);
+                    window.localStorage.setItem("nickname", nickname);
+                    window.location.href = "/static/html/token.html";
+                } else {
+                    const error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b) {
+                alert("ERROR: " + b);
+            }
+        });
+    });
+
+
+    // register.
+    $("#register").click(function () {
+        const nickname = $("#nickname").val();
+        const password = $("#password").val();
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: '/account/new',
             data: {nickname: nickname, password: password},
             asyn: false,
             success: function (data) {

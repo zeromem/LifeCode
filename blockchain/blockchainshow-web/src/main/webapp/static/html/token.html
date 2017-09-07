@@ -19,6 +19,7 @@
 <label for="amount">金额:</label><input type="text" id="amount">
 <input type="button" id="transfer" value="转账"/>
 <br>
+<label id="hint" style="display: none">操作中...</label>
 
 <div id="result" style="display: none">
     <label>转账结果:</label><br>
@@ -55,6 +56,7 @@
     // transfer.
     $("#transfer").click(function () {
         $("#result").hide();
+        $("#hint").show();
         $.ajax({
             type: "post",
             dataType: "json",
@@ -74,10 +76,12 @@
                     const error = data["error"];
                     alert(error);
                 }
+                $("#hint").hide();
             },
             error: function (data, b) {
                 console.log(b);
                 alert("ERROR: " + b);
+                $("#hint").hide();
             }
         });
     });
