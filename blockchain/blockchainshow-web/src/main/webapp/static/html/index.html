@@ -10,18 +10,14 @@
             margin: 0;
             font-family: "微软雅黑", serif;
         }
-
-        #allmap {
-            height: 500px;
-            width: 100%;
-        }
     </style>
     <script src="/static/js/jquery.js"></script>
-    <title>基于区块链的数字资产交易和过程追踪服务</title>
+    <title>基于区块链的数字资产交易和过程追踪服务原型系统</title>
 </head>
 
 <body>
-<h2>基于区块链的数字资产交易和过程追踪服务</h2>
+<a href="/">返回主页</a>
+<h2>基于区块链的数字资产交易和过程追踪服务原型系统</h2>
 <div>
     <input value="昵称" title="昵称" id="nickname">
     <input value="密码" title="密码" id="password">
@@ -34,8 +30,8 @@
 
 <script type="text/javascript">
     $("#login").click(function () {
-        var nickname = $("#nickname").val();
-        var password = $("#password").val();
+        const nickname = $("#nickname").val();
+        const password = $("#password").val();
         $.ajax({
             type: "post",
             dataType: "json",
@@ -44,16 +40,17 @@
             asyn: false,
             success: function (data) {
                 console.log(data);
-                var account = data["account"];
-                if (account != undefined && account != "") {
+                const account = data["account"];
+                if (account !== undefined && account !== "") {
                     window.localStorage.setItem("account", account);
+                    window.localStorage.setItem("nickname", nickname);
                     window.location.href = "/static/html/token.html";
                 } else {
-                    var error = data["error"];
+                    const error = data["error"];
                     alert(error);
                 }
             },
-            error: function (data, b, c) {
+            error: function (data, b) {
                 alert("ERROR: " + b);
             }
         });

@@ -23,8 +23,8 @@ public class Web3jConstant {
 
 
 	public static final String RPC_SERVER_ADDR = "http://10.9.59.138:18001";
-	public static final String tokenAddress = "0xbc0d20e8e43e8a9592958376a7b1712fda7a6c86";
-	public static final String propertyAddress = "0x6cbd37402ab8ab3c41d20dc5e139ec2f7880e720";
+	public static final String tokenAddress = "0x37dc85ae239ec39556ae7cc35a129698152afe3c";
+	public static final String propertyAddress = "0xc7784403f00a1b6cffd1768874a1650a7c969622";
 
 	public static final Web3j publicWeb3j = Web3j.build(new HttpService(RPC_SERVER_ADDR));
 	public static final Parity publicParity = Parity.build(new HttpService(RPC_SERVER_ADDR));

@@ -2,9 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>账户详情</title>
+    <script src="/static/js/jquery.js"></script>
 </head>
 <body>
+<a href="/">返回主页</a>
+<h2>账户详情</h2>
+<label for="nickname">当前用户:</label><input type="text" id="nickname"/>
+<label for="account">账户:</label><input type="text" id="account"/>
+<label for="balance">当前余额:</label><input type="text" id="balance"/>
+<br>
 
+<label>向他人转账</label><br>
+
+<label for="to">账户:</label><input type="text" id="to"/>
+<label for="amount">金额:</label><input type="text" id="amount">
+<input type="button" id="transfer" value="转账"/>
+<br>
+
+<div id="result" style="display: none">
+    <label>转账结果:</label><br>
+    <label for="tokenOfFrom">转账后余额:</label><input type="text" id="tokenOfFrom">
+</div>
+
+<script type="text/javascript">
+    // firstly, load account information.
+    $("#nickname").val(window.localStorage.getItem("nickname"));
+    const account = window.localStorage.getItem("account");
+    $("#account").val(account);
+
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: `/token/${account}/balance`,
+        asyn: true,
+        success: function (data) {
+            console.log(data);
+            const balance = data["balance"];
+            if (balance !== undefined && balance !== "") {
+                $("#balance").val(balance);
+            } else {
+                const error = data["error"];
+                alert(error);
+            }
+        },
+        error: function (data, b, c) {
+            alert("ERROR: " + b);
+        }
+    });
+    /////// account information load over.
+
+    // transfer.
+    $("#transfer").click(function () {
+        $("#result").hide();
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: `/token/${account}/transformation`,
+            data: {to: $("#to").val(), amount: $("#amount").val()},
+            asyn: true,
+            success: function (data) {
+                console.log(data);
+                const tokenOfTo = data["tokenOfTo"];
+                const tokenOfFrom = data["tokenOfFrom"];
+
+                if (tokenOfFrom !== undefined && tokenOfFrom !== "") {
+                    $("#result").show();
+                    $("#tokenOfFrom").val(tokenOfFrom);
+                    $("#balance").val(tokenOfFrom);
+                } else {
+                    const error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b) {
+                console.log(b);
+                alert("ERROR: " + b);
+            }
+        });
+    });
+</script>
 </body>
 </html>

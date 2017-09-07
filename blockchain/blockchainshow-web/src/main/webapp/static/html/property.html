@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过程追踪</title>
+    <script src="/static/js/jquery.js"></script>
+</head>
+<body>
+<a href="/">返回主页</a>
+
+<h2>过程追踪</h2>
+<div>
+    <label for="account">当前账户:</label><input type="text" id="account">
+</div>
+<br>
+
+<label for="propId">资产编号:</label><input type="text" id="propId">
+<input type="button" id="search" value="搜索">
+<input type="button" id="upload" value="上传">
+<input type="text" value="转让账号" id="to" title="转让账号" onfocus="if ($(this).val() === '转让账号') $(this).val('')" onblur="if ($(this).val() === '') $(this).val('转让账号')">
+<input type="button" id="transfer" value="转让">
+<br>
+
+<div>
+<label for="ownerList">流转记录:</label><br>
+<textarea id="ownerList" style="width: 500px; height: 100px;"></textarea>
+<br>
+</div>
+
+<div>
+
+</div>
+
+<script type="text/javascript">
+    $("#account").val(window.localStorage.getItem("account"));
+
+    // search.
+    $("#search").click(function () {
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: `/property/${$("#propId").val()}/listOwners`,
+            asyn: false,
+            success: function (data) {
+                console.log(data);
+                const list = data["ownerList"];
+
+                if (list !== undefined && list !== "") {
+                    $("#ownerList").val(list.join('\n'));
+                } else {
+                    const error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b) {
+                console.log(b);
+                alert("ERROR: " + b);
+            }
+        });
+    });
+
+    // upload.
+    $("#upload").click(function () {
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: `/property/${$("#propId").val()}/firstOwn`,
+            data: {firstOwner: $("#account").val()},
+            asyn: false,
+            success: function (data) {
+                console.log(data);
+                const owner = data["currentOwner"];
+
+                if (owner !== undefined && owner !== "") {
+                    $("#ownerList").val(owner);
+                } else {
+                    const error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b) {
+                console.log(b);
+                alert("ERROR: " + b);
+            }
+        });
+    });
+
+    // transfer.
+    $("#transfer").click(function () {
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: `/property/${$("#propId").val()}/transformation`,
+            data: {from: $("#account").val(), to: $("#to").val()},
+            asyn: false,
+            success: function (data) {
+                console.log(data);
+                const owner = data["currentOwner"];
+
+                if (owner !== undefined && owner !== "") {
+                    $("#ownerList").val(owner);
+                } else {
+                    const error = data["error"];
+                    alert(error);
+                }
+            },
+            error: function (data, b) {
+                console.log(data);
+                console.log(b);
+                alert("ERROR: " + b);
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
