@@ -34,7 +34,8 @@ public class ReadFiles {
 		System.out.println("================================");
 
 		// listStatus return a FileStatus[]
-		// use reflect to call FileSystem's private method listStatus(ArrayList, Path, PathFilter)
+		// use reflect to call FileSystem's private method listStatus(ArrayList, Path, PathFilter),
+		// this will fill result into first parameter ArrayList.
 		Method method = FileSystem.class.getDeclaredMethod("listStatus", ArrayList.class, Path.class, PathFilter.class);
 		method.setAccessible(true);
 

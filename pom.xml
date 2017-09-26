@@ -12,9 +12,10 @@
         <module>langspec</module>
         <module>blockchain</module>
         <module>hack</module>
-        <module>creditrack</module>
         <module>kafka</module>
         <module>hadoop</module>
+        <module>mongo</module>
+        <module>jdksource</module>
     </modules>
     <name>All My Code</name>
 
