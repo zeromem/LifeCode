@@ -1,18 +1,20 @@
-package org.zeromem.lifecode.hack.paxos;
+package org.zeromem.lifecode.paxos;
 
 import akka.actor.AbstractActor;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import static org.zeromem.lifecode.hack.paxos.Proposer.*;
+
+import java.math.BigDecimal;
+
 
 /**
  * Created by zeromem on 2017/9/26.
  */
 public class Acceptor extends AbstractActor {
 	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
-	private Integer maxN;
-	private Integer value;
+	private BigDecimal maxUniq;
+	private Object value;
 
 
 	static public Props props() {
@@ -21,9 +23,7 @@ public class Acceptor extends AbstractActor {
 
 	@Override
 	public Receive createReceive() {
-		return receiveBuilder().match(Prepare.class, (n) -> {
-		}).build();
-
+		return receiveBuilder().build();
 	}
 
 	////////// acceptor's messages:

@@ -1,5 +1,8 @@
 package org.zeromem.lifecode.hack;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by zeromem on 2017/8/11.
  * int s = (bits >> 31) == 0) ? 1 : -1;
@@ -9,6 +12,20 @@ package org.zeromem.lifecode.hack;
  */
 public class CalcFloat {
 	public static void main(String[] args) {
+		printDouble();
+	}
+
+	public static void printDouble() {
+		Set<String> set = new HashSet<>();
+		for (double i = 0; i < 1000; i++) {
+			String s = String.format("%.3f", i / 1000);
+			set.add(s);
+			System.out.println(s);
+		}
+		System.out.println(set.size());
+	}
+
+	public static void testIEEE754() {
 		float f = 10;
 		int i = Float.floatToIntBits(f);
 

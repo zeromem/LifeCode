@@ -16,6 +16,7 @@
         <module>hadoop</module>
         <module>mongo</module>
         <module>jdksource</module>
+        <module>paxos</module>
     </modules>
     <name>All My Code</name>
 
