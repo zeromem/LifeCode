@@ -134,10 +134,6 @@ public class Proposer extends AbstractActor {
 		return builder.build();
 	}
 
-	public void setAcceptors(List<ActorSelection> acceptors) {
-		this.acceptors = acceptors;
-	}
-
 	public static void main(String[] args) throws InterruptedException {
 		Config config = ConfigFactory.load().getConfig("paxos");
 		if (!config.getString("role").equals("proposer")) {
