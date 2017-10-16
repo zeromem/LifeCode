@@ -17,6 +17,7 @@
         <module>mongo</module>
         <module>jdksource</module>
         <module>paxos</module>
+        <module>algorithmaction</module>
     </modules>
     <name>All My Code</name>
 

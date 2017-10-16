@@ -8,9 +8,11 @@ import java.io.Serializable;
  * Created by zeromem on 2017/10/10.
  */
 
-
 public class Message implements Serializable {
-	public static class ClientRequest {
+	/**
+	 * 客户端发送给proposer的请求
+	 */
+	public static class ClientRequest extends Message {
 		public final String key;
 		public final Value value;
 
@@ -20,19 +22,30 @@ public class Message implements Serializable {
 		}
 	}
 
-	public static class Prepare {
+
+	///////////// prepare阶段相关请求 ////////////////////
+	public static class Prepare extends Message {
+		public final String key;
 		public final Double uniq;
 
-		public Prepare(Double uniq) {
+		public Prepare(String key, Double uniq) {
+			this.key = key;
 			this.uniq = uniq;
 		}
 	}
 
-	public static class PrepareResponseTimeout {
+	public static class PrepareTimeout extends Message {
+		public final String key;
+		public final Double uniq;
 
+
+		public PrepareTimeout(String key, Double uniq) {
+			this.key = key;
+			this.uniq = uniq;
+		}
 	}
 
-	public static class PrepareOK {
+	public static class PrepareOK extends Message {
 		public final String key;
 		public final Double uniq;
 		public final Double AcceptedUniq;
@@ -47,7 +60,7 @@ public class Message implements Serializable {
 		}
 	}
 
-	public static class PrepareReject {
+	public static class PrepareReject extends Message {
 		public final String key;
 		public final Double uniq;
 
@@ -58,7 +71,8 @@ public class Message implements Serializable {
 	}
 
 
-	public static class Accept {
+	//////////// Accept阶段相关请求 //////////////////
+	public static class Accept extends Message {
 		public final String key;
 		public final Double uniq;
 		public final Value value;
@@ -70,6 +84,52 @@ public class Message implements Serializable {
 			this.value = value;
 		}
 	}
+
+	public static class AcceptOK extends Message {
+		public final String key;
+		public final Double uniq;
+		public final Value value;
+
+		public AcceptOK(String key, Double uniq, Value value) {
+			this.key = key;
+			this.uniq = uniq;
+			this.value = value;
+		}
+	}
+
+	public static class AcceptReject extends Message {
+		public final String key;
+		public final Double uniq;
+
+		public AcceptReject(String key, Double uniq) {
+			this.key = key;
+			this.uniq = uniq;
+		}
+	}
+
+	public static class AcceptTimeout extends Message {
+		public final String key;
+		public final Double uniq;
+
+		public AcceptTimeout(String key, Double uniq) {
+			this.key = key;
+			this.uniq = uniq;
+		}
+	}
+
+	public static class Decide extends Message {
+		public final String key;
+		public final Double uniq;
+		public final Value value;
+
+
+		public Decide(String key, Double uniq, Value value) {
+			this.key = key;
+			this.uniq = uniq;
+			this.value = value;
+		}
+	}
+
 }
 
 

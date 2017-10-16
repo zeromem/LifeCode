@@ -15,4 +15,12 @@ public class ConfigLoadTest {
 		System.out.println(acceptors);
 
 	}
+
+	@Test
+	public void override() {
+		Config config = ConfigFactory.load().getConfig("paxos");
+		System.out.println(config);
+
+
+	}
 }

@@ -11,5 +11,8 @@ public class Constants {
 
 	public static final Integer NUM_ACCEPTOR = 5;
 
-	public static final Integer NUM_MAJORITY = NUM_ACCEPTOR / 2 + 1;
+	// todo 1 is just for test.
+	public static final Integer NUM_MAJORITY = /*NUM_ACCEPTOR / 2 +*/ 1;
+
+	public static final String AKKA_SYS_PAXOS_PREFIX = "akka.tcp://paxos@";
 }
