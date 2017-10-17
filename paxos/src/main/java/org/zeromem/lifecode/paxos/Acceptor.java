@@ -13,6 +13,9 @@ import org.zeromem.lifecode.paxos.message.Message;
 
 import java.util.HashMap;
 
+import static org.zeromem.lifecode.paxos.Constants.LITERAL_ACCEPTOR;
+import static org.zeromem.lifecode.paxos.Constants.LITERAL_ROLE;
+
 
 /**
  * @author zeromem
@@ -78,16 +81,13 @@ public class Acceptor extends AbstractActor {
 
 	public static void main(String[] args) {
 		Config config = ConfigFactory.load().getConfig("paxos");
-		if (!config.getString("role").equals("acceptor")) {
+		if (!config.getString(LITERAL_ROLE).equals(LITERAL_ACCEPTOR)) {
 			throw new IllegalStateException(
 					"only acceptor can launch Acceptor process! set [role] to acceptor in application.conf");
 		}
 		Integer id = config.getInt("id");
 
 		ActorSystem system = ActorSystem.create("paxos", config.getConfig("acceptor"));
-		ActorRef proposer = system.actorOf(Acceptor.props(id), "proposer-" + id);
-
-
-		proposer.tell(new Message.ClientRequest("test", Value.of("hello world")), ActorRef.noSender());
+		ActorRef acceptor = system.actorOf(Acceptor.props(id), "acceptor-" + id);
 	}
 }
