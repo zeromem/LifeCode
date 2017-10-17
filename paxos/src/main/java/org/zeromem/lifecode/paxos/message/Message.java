@@ -5,7 +5,9 @@ import org.zeromem.lifecode.paxos.Value;
 import java.io.Serializable;
 
 /**
- * Created by zeromem on 2017/10/10.
+ *
+ * @author zeromem
+ * @date 2017/10/10
  */
 
 public class Message implements Serializable {
@@ -24,6 +26,7 @@ public class Message implements Serializable {
 
 
 	///////////// prepare阶段相关请求 ////////////////////
+
 	public static class Prepare extends Message {
 		public final String key;
 		public final Double uniq;

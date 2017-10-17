@@ -1,51 +1,93 @@
 package org.zeromem.lifecode.paxos;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import akka.japi.pf.ReceiveBuilder;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import org.zeromem.lifecode.paxos.message.Message;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
 
 
 /**
- * Created by zeromem on 2017/9/26.
+ * @author zeromem
+ * @date 2017/9/26
  */
 public class Acceptor extends AbstractActor {
 	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
-	private BigDecimal maxUniq;
-	private Object value;
 
+	static public Props props(final int id) {
+		return Props.create(Acceptor.class, () -> new Acceptor(id));
+	}
 
-	static public Props props() {
-		return Props.create(Acceptor.class, () -> new Acceptor());
+	public final Integer id;
+
+	private final HashMap<String, Double> highestPrepareUniq;
+	private final HashMap<String, Double> highestAcceptUniq;
+	private final HashMap<String, Value> highestAcceptValue;
+
+	public Acceptor(int id) {
+		this.id = id;
+		highestPrepareUniq = new HashMap<>();
+		highestAcceptUniq = new HashMap<>();
+		highestAcceptValue = new HashMap<>();
 	}
 
 	@Override
 	public Receive createReceive() {
-		return receiveBuilder().build();
+		ReceiveBuilder builder = ReceiveBuilder.create();
+		builder.match(Message.Prepare.class, prepare -> {
+			String key = prepare.key;
+			Double uniq = prepare.uniq;
+			Double highUniq = highestPrepareUniq.getOrDefault(key, 0d);
+			if (uniq < highUniq) {
+				sender().tell(new Message.PrepareReject(key, uniq), self());
+			} else {
+				highestPrepareUniq.put(key, uniq);
+				// PrepareOK里面的acceptedUniq和acceptedValue可能为null.
+				Double acceptedUniq = highestAcceptUniq.get(key);
+				Value acceptedValue = highestAcceptValue.get(key);
+				sender().tell(new Message.PrepareOK(key, uniq, acceptedUniq, acceptedValue), self());
+			}
+		});
+
+		builder.match(Message.Accept.class, accept -> {
+			String key = accept.key;
+			Double uniq = accept.uniq;
+			if (uniq < highestPrepareUniq.getOrDefault(key, 0d)) {
+				sender().tell(new Message.AcceptReject(key, uniq), self());
+			} else {
+				highestPrepareUniq.put(key, uniq);
+				Value value = accept.value;
+				if (value != null) {
+					highestAcceptUniq.put(key, uniq);
+					highestAcceptValue.put(key, value);
+				}
+				sender().tell(new Message.AcceptOK(key, uniq, value), self());
+			}
+		});
+
+		builder.matchAny(o -> log.warning("received unknown message!"));
+		return builder.build();
 	}
 
-	////////// acceptor's messages:
-	public static class Ack {
-		public final Integer n;
-		public final Integer v;
-		public final Integer nv;
-
-		public Ack(Integer n, Integer v, Integer nv) {
-			this.n = n;
-			this.v = v;
-			this.nv = nv;
+	public static void main(String[] args) {
+		Config config = ConfigFactory.load().getConfig("paxos");
+		if (!config.getString("role").equals("acceptor")) {
+			throw new IllegalStateException(
+					"only acceptor can launch Acceptor process! set [role] to acceptor in application.conf");
 		}
-	}
+		Integer id = config.getInt("id");
 
-	public static class NAck {
-		public final Integer n;
-		public final Integer nv;
+		ActorSystem system = ActorSystem.create("paxos", config.getConfig("acceptor"));
+		ActorRef proposer = system.actorOf(Acceptor.props(id), "proposer-" + id);
 
-		public NAck(Integer n, Integer nv) {
-			this.n = n;
-			this.nv = nv;
-		}
+
+		proposer.tell(new Message.ClientRequest("test", Value.of("hello world")), ActorRef.noSender());
 	}
 }

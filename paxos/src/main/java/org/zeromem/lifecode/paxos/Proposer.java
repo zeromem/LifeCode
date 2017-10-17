@@ -13,19 +13,23 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static org.zeromem.lifecode.paxos.Constants.AKKA_SYS_PAXOS_PREFIX;
-import static org.zeromem.lifecode.paxos.Constants.ID_FRACTION_RESTRICT;
-import static org.zeromem.lifecode.paxos.Constants.NUM_MAJORITY;
+import static org.zeromem.lifecode.paxos.Constants.*;
 
 
 /**
- * Created by zeromem on 2017/9/26.
+ *
+ * @author zeromem
+ * @date 2017/9/26
  */
 public class Proposer extends AbstractActor {
-	// log of this's actor
 	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
-	// props to create this actor
+	/** props to create this actor
+	 *
+	 * @param id
+	 * @param config
+	 * @return
+	 */
 	static public Props props(final Integer id, final Config config) {
 		return Props.create(Proposer.class, () -> new Proposer(id, config));
 	}
@@ -63,7 +67,7 @@ public class Proposer extends AbstractActor {
 	/**
 	 * prepare阶段回复提案N的其他proposer的最大提案号
 	 */
-	private HashMap<Double, Double> highestNumber;
+	private HashMap<Double, Double> receivedHighestUniq;
 
 	/**
 	 * prepare阶段回复提案N的其他proposer的最大提案号对应的值
@@ -96,7 +100,9 @@ public class Proposer extends AbstractActor {
 		presetValue = new HashMap<>();
 		prepareOKAcceptors = new WeakHashMap<>();
 		prepareRejectCounter = new WeakHashMap<>();
-		highestNumber = new HashMap<>();
+		acceptOKCounter = new HashMap<>();
+		acceptRejectCounter = new HashMap<>();
+		receivedHighestUniq = new HashMap<>();
 		receivedValue = new HashMap<>();
 
 		init(config);
@@ -116,7 +122,12 @@ public class Proposer extends AbstractActor {
 		}).collect(Collectors.toSet());
 	}
 
-	// main logic of this actor
+
+	/**
+	 * main logic of this actor
+	 *
+	 * @return
+	 */
 	@Override public Receive createReceive() {
 		ReceiveBuilder builder = ReceiveBuilder.create();
 
@@ -130,21 +141,20 @@ public class Proposer extends AbstractActor {
 			Double uniq = keyToCurUniq.getOrDefault(key, fractionId) + 1;
 			keyToCurUniq.put(key, uniq);
 
-			// 向所有acceptor发送prepare todo 从配置文件加载acceptors
-			ActorSelection acceptors = getContext().actorSelection("/acceptor-*");
-			acceptors.tell(new Message.Prepare(clientRequest.key, uniq), getSelf());
+			// 向所有acceptor发送prepare
+			selMulticast(this.acceptors, new Message.Prepare(clientRequest.key, uniq));
 
 			// 设置超时，超时后prepare阶段自动失败
 			getContext().getSystem().scheduler().scheduleOnce(
 					Duration.create(10, TimeUnit.SECONDS),
-					getSelf(),
+					self(),
 					new Message.PrepareTimeout(key, uniq),
 					getContext().getSystem().dispatcher(),
-					getSelf()
+					self()
 			);
 		});
 
-		////////// prepare阶段 //////////////////
+		////////// prepare阶段的响应 //////////////////
 		// acceptor回复的PrepareOK消息
 		builder.match(Message.PrepareOK.class, ok -> {
 			Double uniq = ok.uniq;
@@ -156,12 +166,12 @@ public class Proposer extends AbstractActor {
 
 			// 将回复ok的acceptor保存（后续需要向他们发送Accept请求）
 			prepareOKAcceptors.putIfAbsent(uniq, new HashSet<>());
-			prepareOKAcceptors.get(uniq).add(getSender());
+			prepareOKAcceptors.get(uniq).add(sender());
 
 			// 如果回复中包含其他已有提案编号 且 编号更大，则将其作为自己后续的提案值
 			Double acceptedUniq = ok.AcceptedUniq;
-			if (acceptedUniq != null && acceptedUniq > highestNumber.getOrDefault(uniq, 0d)) {
-				highestNumber.put(uniq, acceptedUniq);
+			if (acceptedUniq != null && acceptedUniq > receivedHighestUniq.getOrDefault(uniq, fractionId)) {
+				receivedHighestUniq.put(uniq, acceptedUniq);
 				receivedValue.put(uniq, ok.AcceptedValue);
 			}
 
@@ -191,13 +201,14 @@ public class Proposer extends AbstractActor {
 		// prepare阶段超时标记
 		builder.match(Message.PrepareTimeout.class, timeout -> {
 			if (checkValid(timeout.key, timeout.uniq)) {
-				keyToCurUniq.put(timeout.key, timeout.uniq + 1);
+				fail(timeout.key, timeout.uniq);
 			}
 
 		});
-		///////////////////////////////////////////////
+		//////////////////////////////////////////////////
 
-		///////////// accept阶段 /////////////////////
+
+		///////////// accept阶段的响应 /////////////////////
 		builder.match(Message.AcceptOK.class, ok -> {
 			String key = ok.key;
 			Double uniq = ok.uniq;
@@ -208,7 +219,7 @@ public class Proposer extends AbstractActor {
 			acceptOKCounter.put(uniq, numOK);
 			if (numOK >= NUM_MAJORITY) {
 				// 提案成功!
-				log.info("proposal success!");
+				log.info("proposal[{}, {}] success!", key, ok.value);
 			}
 		});
 
@@ -222,11 +233,15 @@ public class Proposer extends AbstractActor {
 			acceptRejectCounter.put(uniq, numReject);
 			if (numReject >= NUM_MAJORITY) {
 				// 提案失败!
-				log.info("proposal failed!");
+				log.info("proposal[{}, {}] failed!", key, receivedValue.get(uniq));
 			}
 		});
 
-		builder.match(Message.AcceptTimeout)
+		builder.match(Message.AcceptTimeout.class, timeout -> {
+			if (checkValid(timeout.key, timeout.uniq)) {
+				fail(timeout.key, timeout.uniq);
+			}
+		});
 
 		builder.matchAny(o -> log.info("received unknown message.")).build();
 		return builder.build();
@@ -244,14 +259,30 @@ public class Proposer extends AbstractActor {
 
 	/**
 	 * 想要设置key值的提案uniq失败,将key对应的提案号提高
+	 * 三个值中取最大{当前号,以前发出的号,收到的号}
 	 * @param key
-	 * @param uniq
+	 * @param sentUniq
 	 */
-	private void fail(String key, Double uniq) {
-		Double curUniq = keyToCurUniq.get(key);
-		if (curUniq - uniq < 1) {
-			keyToCurUniq.put(key, curUniq + 1);
+	private void fail(String key, Double sentUniq) {
+		int curNum = keyToCurUniq.get(key).intValue();
+		int seenNum = receivedHighestUniq.getOrDefault(curNum, 0d).intValue();
+		int sentNum = sentUniq.intValue();
+
+		int max;
+		if (seenNum > curNum) {
+			if (seenNum > sentNum) {
+				max = seenNum;
+			} else {
+				max = sentNum;
+			}
+		} else {
+			if (curNum > sentNum) {
+				max = curNum;
+			} else {
+				max = sentNum;
+			}
 		}
+		keyToCurUniq.put(key, max + fractionId);
 	}
 
 	/**
@@ -261,13 +292,13 @@ public class Proposer extends AbstractActor {
 	 */
 	private void selMulticast(Set<ActorSelection> targets, final Message message) {
 		targets.forEach(target -> {
-			target.tell(message, getSelf());
+			target.tell(message, self());
 		});
 	}
 
 	private void refMulticast(Set<ActorRef> targets, final Message message) {
 		targets.forEach(target -> {
-			target.tell(message, getSelf());
+			target.tell(message, self());
 		});
 	}
 
@@ -275,7 +306,7 @@ public class Proposer extends AbstractActor {
 
 	public static void main(String[] args) throws InterruptedException {
 		Config config = ConfigFactory.load().getConfig("paxos");
-		if (!config.getString("role").equals("proposer")) {
+		if (!LITERAL_PROPOSER.equals(config.getString(LITERAL_ROLE))) {
 			throw new IllegalStateException(
 					"only proposer can launch Proposer process! set [role] to proposer in application.conf");
 		}

@@ -3,7 +3,9 @@ package org.zeromem.lifecode.paxos;
 import java.io.Serializable;
 
 /**
- * Created by zeromem on 2017/10/9.
+ *
+ * @author zeromem
+ * @date 2017/10/9
  */
 public class Value implements Serializable {
 	public final Object value;
