@@ -31,6 +31,7 @@ public class Constants {
 	static {
 		NUM_ACCEPTOR = ConfigFactory.load().getStringList("paxos.acceptors").size();
 		NUM_MAJORITY = NUM_ACCEPTOR / 2 + 1;
+//		NUM_MAJORITY = 1;
 	}
 
 
