@@ -3,7 +3,7 @@ package org.zeromem.lifecode.akka.remote;
 import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.typesafe.config.Config;
+import akka.japi.pf.ReceiveBuilder;
 import com.typesafe.config.ConfigFactory;
 import scala.concurrent.duration.Duration;
 
@@ -31,23 +31,16 @@ public class Shouter extends AbstractActor {
 
 	@Override
 	public Receive createReceive() {
-		return null;
+		ReceiveBuilder builder = ReceiveBuilder.create();
+		return builder.build();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		ActorSystem system = ActorSystem.create("remote", ConfigFactory.load().getConfig("shouter"));
-		ActorRef shouter = system.actorOf(Props.create(Shouter.class), "shouter");
+		ActorRef shouter = system.actorOf(Shouter.props(), "shouter");
 		ActorSelection echo = system.actorSelection("akka.tcp://remote@10.9.54.111:2552/user/echo");
 
-		system.scheduler().scheduleOnce(
-				Duration.create(5, TimeUnit.SECONDS),
-				echo.anchor(),
-				new Message("hello world"),
-				system.dispatcher(),
-				shouter
-		);
-
-
+		Thread.sleep(2000);
+		echo.tell(new Message("hello world"), shouter);
 	}
-
 }

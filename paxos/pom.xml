@@ -86,6 +86,13 @@
             <artifactId>akka-remote_${scala.binary_version}</artifactId>
             <version>${akka.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>chill-akka_${scala.binary_version}</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
