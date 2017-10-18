@@ -18,6 +18,7 @@
         <module>jdksource</module>
         <module>paxos</module>
         <module>algorithmaction</module>
+        <module>akka</module>
     </modules>
     <name>All My Code</name>
 
