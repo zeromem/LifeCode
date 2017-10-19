@@ -39,7 +39,7 @@ public class Proposer extends AbstractActor {
 	@Override
 	public void preStart() throws Exception {
 		super.preStart();
-	}
+    }
 
 	public final Integer id;
 	private final Double fractionId;

@@ -43,9 +43,15 @@ public class Acceptor extends AbstractActor {
 		highestAcceptValue = new HashMap<>();
 	}
 
+	@Override public void preStart() throws Exception {
+        super.preStart();
+        context().system().eventStream().subscribe(self(), akka.remote.DisassociatedEvent.class);
+    }
+
 	@Override
 	public Receive createReceive() {
-		ReceiveBuilder builder = ReceiveBuilder.create();
+        // TODO: 2017/10/19 添加对DisassociatedEvent的处理
+        ReceiveBuilder builder = ReceiveBuilder.create();
 		builder.match(Message.Prepare.class, prepare -> {
 			String key = prepare.key;
 			Double uniq = prepare.uniq;
