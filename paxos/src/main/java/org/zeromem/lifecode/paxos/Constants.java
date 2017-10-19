@@ -33,8 +33,4 @@ public class Constants {
 		NUM_MAJORITY = NUM_ACCEPTOR / 2 + 1;
 //		NUM_MAJORITY = 1;
 	}
-
-
-
-
 }

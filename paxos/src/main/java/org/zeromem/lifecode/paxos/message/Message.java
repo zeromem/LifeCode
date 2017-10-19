@@ -17,7 +17,6 @@ public class Message implements Serializable {
 	public static class ClientRequest extends Message {
 		public final String key;
 		public final Value value;
-
 		public ClientRequest(String key, Value value) {
 			this.key = key;
 			this.value = value;

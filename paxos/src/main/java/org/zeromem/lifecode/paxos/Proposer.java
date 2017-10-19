@@ -6,6 +6,7 @@ import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValueFactory;
 import org.zeromem.lifecode.paxos.message.Message;
 import scala.concurrent.duration.Duration;
 
@@ -305,20 +306,26 @@ public class Proposer extends AbstractActor {
 
 
 	public static void main(String[] args) throws InterruptedException {
-		Config config = ConfigFactory.load().getConfig("paxos");
-		if (!LITERAL_PROPOSER.equals(config.getString(LITERAL_ROLE))) {
+		Config rawConf = ConfigFactory.load().getConfig("paxos");
+        String role = rawConf.getString(LITERAL_ROLE);
+        if (!LITERAL_PROPOSER.equals(role)) {
 			throw new IllegalStateException(
 					"only proposer can launch Proposer process! set [role] to proposer in application.conf");
 		}
-		Integer id = config.getInt("id");
+        Integer id = rawConf.getInt("id");
+        Integer port = rawConf.getInt(role + ".port");
+        Config config = rawConf.withValue("akka.remote.netty.tcp.port", ConfigValueFactory.fromAnyRef(port));
 
-		ActorSystem system = ActorSystem.create("paxos", config.getConfig("proposer"));
+		ActorSystem system = ActorSystem.create("paxos", config);
 		ActorRef proposer = system.actorOf(Proposer.props(id, config), "proposer-" + id);
 
 
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 
-		proposer.tell(new Message.ClientRequest("test", Value.of("hello world")), ActorRef.noSender());
-	}
+        proposer.tell(new Message.ClientRequest("test", Value.of("hello world")), ActorRef.noSender());
+        Thread.sleep(2000);
+
+        system.terminate();
+    }
 
 }

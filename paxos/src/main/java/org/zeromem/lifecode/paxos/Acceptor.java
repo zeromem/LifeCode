@@ -9,11 +9,13 @@ import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValueFactory;
 import org.zeromem.lifecode.paxos.message.Message;
 
 import java.util.HashMap;
 
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ACCEPTOR;
+import static org.zeromem.lifecode.paxos.Constants.LITERAL_PROPOSER;
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ROLE;
 
 
@@ -80,14 +82,17 @@ public class Acceptor extends AbstractActor {
 	}
 
 	public static void main(String[] args) {
-		Config config = ConfigFactory.load().getConfig("paxos");
-		if (!config.getString(LITERAL_ROLE).equals(LITERAL_ACCEPTOR)) {
+		Config rawConf = ConfigFactory.load().getConfig("paxos");
+		String role = rawConf.getString(LITERAL_ROLE);
+		if (!LITERAL_PROPOSER.equals(role)) {
 			throw new IllegalStateException(
-					"only acceptor can launch Acceptor process! set [role] to acceptor in application.conf");
+					"only proposer can launch Proposer process! set [role] to proposer in application.conf");
 		}
-		Integer id = config.getInt("id");
+		Integer id = rawConf.getInt("id");
+		Integer port = rawConf.getInt(role + ".port");
+		Config config = rawConf.withValue("akka.remote.netty.tcp.port", ConfigValueFactory.fromAnyRef(port));
 
-		ActorSystem system = ActorSystem.create("paxos", config.getConfig("acceptor"));
+		ActorSystem system = ActorSystem.create("paxos", config);
 		ActorRef acceptor = system.actorOf(Acceptor.props(id), "acceptor-" + id);
 	}
 }
