@@ -84,9 +84,9 @@ public class Acceptor extends AbstractActor {
 	public static void main(String[] args) {
 		Config rawConf = ConfigFactory.load().getConfig("paxos");
 		String role = rawConf.getString(LITERAL_ROLE);
-		if (!LITERAL_PROPOSER.equals(role)) {
+		if (!LITERAL_ACCEPTOR.equals(role)) {
 			throw new IllegalStateException(
-					"only proposer can launch Proposer process! set [role] to proposer in application.conf");
+					"only acceptor can launch Acceptor process! set [role] to acceptor in application.conf");
 		}
 		Integer id = rawConf.getInt("id");
 		Integer port = rawConf.getInt(role + ".port");
