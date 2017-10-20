@@ -21,9 +21,10 @@ import static org.zeromem.lifecode.paxos.Constants.*;
  *
  * @author zeromem
  * @date 2017/9/26
+ * TODO: 提案失败后需要考虑随机重试（又不能一直重试）
  */
 public class Proposer extends AbstractActor {
-	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
+	private LoggingAdapter log = Logging.getLogger(context().system(), this);
 
 	/** props to create this actor
 	 *
@@ -88,6 +89,9 @@ public class Proposer extends AbstractActor {
 
 
 	private Set<ActorSelection> acceptors;
+    private Set<ActorSelection> learners;
+
+
 
 	/**
 	 * @param id assigned proposer id.
@@ -121,7 +125,19 @@ public class Proposer extends AbstractActor {
 					"/user/acceptor-*";
 			return getContext().actorSelection(sb);
 		}).collect(Collectors.toSet());
-	}
+
+        List<String> learners = config.getStringList("learners");
+        final Integer port2 = config.getInt("learner.port");
+
+        this.learners = learners.stream().map(host -> {
+            String sb = AKKA_SYS_PAXOS_PREFIX +
+                    host +
+                    ":" +
+                    port2 +
+                    "/user/learner-*";
+            return context().actorSelection(sb);
+        }).collect(Collectors.toSet());
+    }
 
 
 	/**
@@ -219,8 +235,8 @@ public class Proposer extends AbstractActor {
 			int numOK = acceptOKCounter.getOrDefault(uniq, 0) + 1;
 			acceptOKCounter.put(uniq, numOK);
 			if (numOK >= NUM_MAJORITY) {
-				// 提案成功!
 				log.info("proposal[{}, {}] success!", key, ok.value);
+				selMulticast(learners, new Message.Decide(key, uniq, ok.value));
 			}
 		});
 

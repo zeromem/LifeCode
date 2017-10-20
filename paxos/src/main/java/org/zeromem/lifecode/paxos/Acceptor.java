@@ -7,6 +7,7 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
+import akka.remote.DisassociatedEvent;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueFactory;
@@ -50,7 +51,6 @@ public class Acceptor extends AbstractActor {
 
 	@Override
 	public Receive createReceive() {
-        // TODO: 2017/10/19 添加对DisassociatedEvent的处理
         ReceiveBuilder builder = ReceiveBuilder.create();
 		builder.match(Message.Prepare.class, prepare -> {
 			String key = prepare.key;
@@ -82,6 +82,10 @@ public class Acceptor extends AbstractActor {
 				sender().tell(new Message.AcceptOK(key, uniq, value), self());
 			}
 		});
+
+        builder.match(DisassociatedEvent.class, event -> {
+            log.warning(event.toString());
+        });
 
 		builder.matchAny(o -> log.warning("received unknown message!"));
 		return builder.build();
