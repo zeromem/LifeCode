@@ -21,11 +21,20 @@ public class Message implements Serializable {
 			this.key = key;
 			this.value = value;
 		}
-	}
+
+        @Override
+        public String toString() {
+            return "ClientRequest{" +
+                    "key='" + key + '\'' +
+                    ", value=" + value +
+                    '}';
+        }
+    }
 
 
-	///////////// prepare阶段相关请求 ////////////////////
-
+    /**
+     * Proposer在prepare阶段发送给Acceptor的Prepare
+     */
 	public static class Prepare extends Message {
 		public final String key;
 		public final Double uniq;
@@ -34,8 +43,19 @@ public class Message implements Serializable {
 			this.key = key;
 			this.uniq = uniq;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "Prepare{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    '}';
+        }
+    }
+
+    /**
+     * Proposer在prepare阶段内部使用的PrepareTimeout
+     */
 	public static class PrepareTimeout extends Message {
 		public final String key;
 		public final Double uniq;
@@ -45,8 +65,19 @@ public class Message implements Serializable {
 			this.key = key;
 			this.uniq = uniq;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "PrepareTimeout{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    '}';
+        }
+    }
+
+    /**
+     * Acceptor在prepare阶段回复给Proposer的确认
+     */
 	public static class PrepareOK extends Message {
 		public final String key;
 		public final Double uniq;
@@ -60,8 +91,21 @@ public class Message implements Serializable {
 			AcceptedUniq = acceptedUniq;
 			AcceptedValue = acceptedValue;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "PrepareOK{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    ", AcceptedUniq=" + AcceptedUniq +
+                    ", AcceptedValue=" + AcceptedValue +
+                    '}';
+        }
+    }
+
+    /**
+     * Acceptor在prepare阶段回复给Proposer的拒绝
+     */
 	public static class PrepareReject extends Message {
 		public final String key;
 		public final Double uniq;
@@ -70,10 +114,20 @@ public class Message implements Serializable {
 			this.key = key;
 			this.uniq = uniq;
 		}
-	}
+
+        @Override
+        public String toString() {
+            return "PrepareReject{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    '}';
+        }
+    }
 
 
-	//////////// Accept阶段相关请求 //////////////////
+    /**
+     * Proposer在accept阶段发送给Acceptor的accept消息
+     */
 	public static class Accept extends Message {
 		public final String key;
 		public final Double uniq;
@@ -85,20 +139,44 @@ public class Message implements Serializable {
 			this.uniq = uniq;
 			this.value = value;
 		}
-	}
 
-	public static class AcceptOK extends Message {
+        @Override
+        public String toString() {
+            return "Accept{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    ", value=" + value +
+                    '}';
+        }
+    }
+
+    /**
+     * Acceptor在accept阶段回复给proposer的确认
+     */
+	public static class AcceptOk extends Message {
 		public final String key;
 		public final Double uniq;
 		public final Value value;
 
-		public AcceptOK(String key, Double uniq, Value value) {
+		public AcceptOk(String key, Double uniq, Value value) {
 			this.key = key;
 			this.uniq = uniq;
 			this.value = value;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "AcceptOk{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    ", value=" + value +
+                    '}';
+        }
+    }
+
+    /**
+     * Acceptor在accept阶段回复给proposer的拒绝
+     */
 	public static class AcceptReject extends Message {
 		public final String key;
 		public final Double uniq;
@@ -107,8 +185,19 @@ public class Message implements Serializable {
 			this.key = key;
 			this.uniq = uniq;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "AcceptReject{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    '}';
+        }
+    }
+
+    /**
+     * Proposer在accept阶段内部使用的AcceptTimeout
+     */
 	public static class AcceptTimeout extends Message {
 		public final String key;
 		public final Double uniq;
@@ -117,8 +206,19 @@ public class Message implements Serializable {
 			this.key = key;
 			this.uniq = uniq;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "AcceptTimeout{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    '}';
+        }
+    }
+
+    /**
+     * decide阶段Proposer发送给Learner的消息
+     */
 	public static class Decide extends Message {
 		public final String key;
 		public final Double uniq;
@@ -130,8 +230,34 @@ public class Message implements Serializable {
 			this.uniq = uniq;
 			this.value = value;
 		}
-	}
 
+        @Override
+        public String toString() {
+            return "Decide{" +
+                    "key='" + key + '\'' +
+                    ", uniq=" + uniq +
+                    ", value=" + value +
+                    '}';
+        }
+    }
+
+    /**
+     * client从learner获取数据的请求
+     */
+	public static class Fetch extends Message {
+        public final String key;
+
+        public Fetch(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return "Fetch{" +
+                    "key='" + key + '\'' +
+                    '}';
+        }
+    }
 }
 
 
