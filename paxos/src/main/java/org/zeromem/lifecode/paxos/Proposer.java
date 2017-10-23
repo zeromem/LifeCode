@@ -319,8 +319,6 @@ public class Proposer extends AbstractActor {
 		});
 	}
 
-
-
 	public static void main(String[] args) throws InterruptedException {
 		Config rawConf = ConfigFactory.load().getConfig("paxos");
         String role = rawConf.getString(LITERAL_ROLE);
@@ -334,14 +332,6 @@ public class Proposer extends AbstractActor {
 
 		ActorSystem system = ActorSystem.create("paxos", config);
 		ActorRef proposer = system.actorOf(Proposer.props(id, config), "proposer-" + id);
-
-
-		Thread.sleep(3000);
-
-        proposer.tell(new Message.ClientRequest("test", Value.of("hello world")), ActorRef.noSender());
-        Thread.sleep(2000);
-
-        system.terminate();
     }
 
 }
