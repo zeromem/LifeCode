@@ -15,7 +15,6 @@ import org.zeromem.lifecode.paxos.message.Message;
 
 import java.util.HashMap;
 
-import static org.zeromem.lifecode.paxos.Constants.LITERAL_ACCEPTOR;
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_LEARNER;
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ROLE;
 
@@ -62,7 +61,7 @@ public class Learner extends AbstractActor {
         builder.match(DisassociatedEvent.class, event -> {
             log.warning(event.toString());
         });
-        return null;
+        return builder.build();
     }
 
     public static void main(String[] args) {
