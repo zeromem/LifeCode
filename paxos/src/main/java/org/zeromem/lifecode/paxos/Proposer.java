@@ -333,5 +333,4 @@ public class Proposer extends AbstractActor {
 		ActorSystem system = ActorSystem.create("paxos", config);
 		ActorRef proposer = system.actorOf(Proposer.props(id, config), "proposer-" + id);
     }
-
 }

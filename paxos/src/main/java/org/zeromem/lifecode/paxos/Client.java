@@ -88,7 +88,7 @@ public class Client extends AbstractActor {
         builder.match(Message.ClientRequest.class, request -> {
             randomProposer().tell(request, self());
         });
-        return null;
+        return builder.build();
     }
 
     public ActorSelection randomLearner() {
