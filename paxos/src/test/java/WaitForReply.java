@@ -10,6 +10,7 @@ import scala.concurrent.duration.Duration;
 
 
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 
 import static akka.pattern.Patterns.ask;
 
