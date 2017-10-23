@@ -226,7 +226,7 @@ public class Proposer extends AbstractActor {
 
 
 		///////////// accept阶段的响应 /////////////////////
-		builder.match(Message.AcceptOK.class, ok -> {
+		builder.match(Message.AcceptOk.class, ok -> {
 			String key = ok.key;
 			Double uniq = ok.uniq;
 			if (!checkValid(key, uniq)) {
@@ -307,13 +307,13 @@ public class Proposer extends AbstractActor {
 	 * @param targets
 	 * @param message
 	 */
-	private void selMulticast(Set<ActorSelection> targets, final Message message) {
+	private void selMulticast(final Set<ActorSelection> targets, final Message message) {
 		targets.forEach(target -> {
 			target.tell(message, self());
 		});
 	}
 
-	private void refMulticast(Set<ActorRef> targets, final Message message) {
+	private void refMulticast(final Set<ActorRef> targets, final Message message) {
 		targets.forEach(target -> {
 			target.tell(message, self());
 		});

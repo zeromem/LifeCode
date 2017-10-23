@@ -16,7 +16,6 @@ import org.zeromem.lifecode.paxos.message.Message;
 import java.util.HashMap;
 
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ACCEPTOR;
-import static org.zeromem.lifecode.paxos.Constants.LITERAL_PROPOSER;
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ROLE;
 
 
@@ -27,11 +26,11 @@ import static org.zeromem.lifecode.paxos.Constants.LITERAL_ROLE;
 public class Acceptor extends AbstractActor {
 	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
-	static public Props props(final int id) {
+	private static Props props(final int id) {
 		return Props.create(Acceptor.class, () -> new Acceptor(id));
 	}
 
-	public final Integer id;
+	private final Integer id;
 
 	private final HashMap<String, Double> highestPrepareUniq;
 	private final HashMap<String, Double> highestAcceptUniq;
@@ -79,7 +78,7 @@ public class Acceptor extends AbstractActor {
 					highestAcceptUniq.put(key, uniq);
 					highestAcceptValue.put(key, value);
 				}
-				sender().tell(new Message.AcceptOK(key, uniq, value), self());
+				sender().tell(new Message.AcceptOk(key, uniq, value), self());
 			}
 		});
 

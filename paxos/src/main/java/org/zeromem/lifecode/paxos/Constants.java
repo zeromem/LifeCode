@@ -26,6 +26,9 @@ public class Constants {
 	public static final String AKKA_SYS_PAXOS_PREFIX = "akka.tcp://paxos@";
 	public static final String LITERAL_PROPOSER = "proposer";
 	public static final String LITERAL_ACCEPTOR = "acceptor";
+    public static final String LITERAL_LEARNER = "learner";
+    public static final String LITERAL_CLIENT = "client";
+
 	public static final String LITERAL_ROLE = "role";
 
 	static {
