@@ -10,6 +10,7 @@ import org.zeromem.lifecode.paxos.message.Message;
  */
 public class Value extends Message {
 	public final Object value;
+	public static final Value NULL = new Value(null);
 
 	private Value(Object value) {
 		this.value = value;
@@ -25,4 +26,8 @@ public class Value extends Message {
 	public static Value of(Object value) {
 		return new Value(value);
 	}
+
+    public boolean isNull() {
+        return value == null;
+    }
 }

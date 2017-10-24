@@ -92,11 +92,12 @@ public class Client extends AbstractActor {
     }
 
     public ActorSelection randomLearner() {
-        return learners.get(random.nextInt() % learners.size());
+        // FIXEDBUG nextInt要带参数，否则结果可能为负
+        return learners.get(random.nextInt(learners.size()));
     }
 
     public ActorSelection randomProposer() {
-        return proposers.get(random.nextInt() % proposers.size());
+        return proposers.get(random.nextInt(proposers.size()));
     }
 
     public static void main(String[] args) {

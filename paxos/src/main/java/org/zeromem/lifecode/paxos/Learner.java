@@ -55,7 +55,7 @@ public class Learner extends AbstractActor {
         });
 
         builder.match(Message.Fetch.class, fetch -> {
-            sender().tell(map.get(fetch.key), self());
+            sender().tell(map.getOrDefault(fetch.key, Value.NULL), self());
         });
 
         builder.match(DisassociatedEvent.class, event -> {
