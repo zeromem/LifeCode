@@ -20,6 +20,5 @@ public class NewAccount {
 		List<String> accountIds = parity.personalListAccounts().send().getAccountIds();
 		System.out.println(accountIds);
 		parity.personalNewAccount("parallel").send().getAccountId();
-		parity.lock
 	}
 }

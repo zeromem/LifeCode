@@ -13,6 +13,7 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueFactory;
 import org.zeromem.lifecode.paxos.message.Message;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import static org.zeromem.lifecode.paxos.Constants.LITERAL_ACCEPTOR;
@@ -59,7 +60,8 @@ public class Acceptor extends AbstractActor {
 				sender().tell(new Message.PrepareReject(key, uniq), self());
 			} else {
 				highestPrepareUniq.put(key, uniq);
-				// PrepareOK里面的acceptedUniq和acceptedValue可能为null.
+                // BUG: highestAcceptValue可能是上一轮提交的信息。使得
+                // PrepareOK里面的acceptedUniq和acceptedValue可能为null.
 				Double acceptedUniq = highestAcceptUniq.get(key);
 				Value acceptedValue = highestAcceptValue.get(key);
 				sender().tell(new Message.PrepareOK(key, uniq, acceptedUniq, acceptedValue), self());
