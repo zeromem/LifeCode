@@ -20,28 +20,19 @@ public class NumberTower {
     public int maxPathSum(int[][] tower) {
         int n = tower.length;
         int[][] dp = new int[n][n];
-        dp[0][0] = tower[0][0];
-        for (int i = 1; i < n; i++) {
-            dp[i][0] = tower[i][0] + dp[i - 1][0];
-            dp[i][i] = tower[i][i] + dp[i - 1][i - 1];
+        for (int j = 0; j < n; j++) {
+            dp[n - 1][j] = tower[n - 1][j];
         }
-
-        for (int j = 1; j < n - 1; j++) {
-            for (int i = 2; i < n; i++) {
-                if (dp[j - 1][i - 1] > dp[j][i - 1]) {
-                    dp[j][i] += dp[j - 1][i - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = i; j >= 0; j--) {
+                if (dp[i + 1][j] > dp[i + 1][j + 1]) {
+                    dp[i][j] = tower[i][j] + dp[i + 1][j];
                 } else {
-                    dp[j][i] += dp[j][i - 1];
+                    dp[i][j] = tower[i][j] + dp[i + 1][j + 1];
                 }
             }
         }
-        int max = 0;
-        for (int j = 0; j < n; j++) {
-            if (dp[j][n - 1] > max) {
-                max = dp[j][n - 1];
-            }
-        }
 
-        return max;
+        return dp[0][0];
     }
 }
