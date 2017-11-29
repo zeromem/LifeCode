@@ -19,6 +19,7 @@
         <module>paxos</module>
         <module>algorithmaction</module>
         <module>akka</module>
+        <module>bloom</module>
     </modules>
     <name>All My Code</name>
 

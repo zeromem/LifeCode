@@ -31,7 +31,9 @@ import java.util.List;
 public class _368LargestDivisibleSubset {
     public static void main(String[] args) {
         _368LargestDivisibleSubset test = new _368LargestDivisibleSubset();
-        int[] nums = new int[]{1, 2, 3, 8};
+//        int[] nums = new int[]{1, 2, 3, 8};
+//        int[] nums = new int[]{4, 8, 10, 240};
+        int[] nums = new int[]{2, 3, 4, 9, 8};
         System.out.println(test.largestDivisibleSubset(nums));
     }
 
@@ -58,6 +60,7 @@ public class _368LargestDivisibleSubset {
         int[] dp = new int[n];
         dp[0] = 1;
         for (int i = 1; i < n; i++) {
+            dp[i] = 1;
             for (int j = 0; j < i; j++) {
                 if (nums[i] % nums[j] == 0) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
@@ -67,14 +70,18 @@ public class _368LargestDivisibleSubset {
 
         int maxPos = 0;
         for (int i = 1; i < n; i++) {
-            if (dp[i] > dp[0]) {
+            if (dp[i] > dp[maxPos]) {
                 maxPos = i;
             }
         }
 
-        for (int i = 0; i <= maxPos; i++) {
-            if (nums[maxPos] % nums[i] == 0) {
+        int cur = nums[maxPos];
+        int d = dp[maxPos];
+        for (int i = maxPos; i >= 0; i--) {
+            if (cur % nums[i] == 0 && dp[i] == d) {
                 res.add(nums[i]);
+                cur = nums[i];
+                d--;
             }
         }
 
