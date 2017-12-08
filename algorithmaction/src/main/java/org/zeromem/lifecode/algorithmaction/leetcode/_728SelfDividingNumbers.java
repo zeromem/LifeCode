@@ -1,5 +1,6 @@
 package org.zeromem.lifecode.algorithmaction.leetcode;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,11 +25,29 @@ import java.util.List;
  */
 public class _728SelfDividingNumbers {
     public static void main(String[] args) {
-
+        _728SelfDividingNumbers test = new _728SelfDividingNumbers();
+        System.out.println(test.selfDividingNumbers(1, 22));
     }
 
     public List<Integer> selfDividingNumbers(int left, int right) {
-
+        List<Integer> res = new LinkedList<>();
+        for (int i = left; i <= right; i++) {
+            if (isSelfDivid(i)) {
+                res.add(i);
+            }
+        }
+        return res;
     }
 
+    private boolean isSelfDivid(int a) {
+        int r = a;
+        while (r > 0) {
+            int x = r % 10;
+            if (x == 0 || a % x != 0) {
+                return false;
+            }
+            r = r / 10;
+        }
+        return true;
+    }
 }

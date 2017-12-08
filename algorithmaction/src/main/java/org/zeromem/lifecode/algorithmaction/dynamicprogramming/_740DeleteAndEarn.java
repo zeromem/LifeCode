@@ -47,9 +47,9 @@ public class _740DeleteAndEarn {
         }
         int[] mayearn = new int[max + 1];
         for (int i = 0; i < mayearn.length; i++) {
-            mayearn[i] =
+//            mayearn[i] =
         }
-
+        return 0;
     }
 
 }
