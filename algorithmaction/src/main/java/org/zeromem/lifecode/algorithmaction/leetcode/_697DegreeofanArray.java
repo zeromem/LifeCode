@@ -45,9 +45,7 @@ public class _697DegreeofanArray {
                 arr[2] = i;
             }
         }
-//        for (Map.Entry<Integer, int[]> entry : map.entrySet()) {
-//            System.out.println(entry.getKey() + " -> " + Arrays.toString(entry.getValue()));
-//        }
+
         int degree = Integer.MIN_VALUE, result = Integer.MAX_VALUE;
         for (int[] pair : map.values()) {
             if (pair[0] > degree) {

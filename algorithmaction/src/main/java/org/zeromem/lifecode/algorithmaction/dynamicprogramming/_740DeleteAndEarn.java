@@ -30,10 +30,26 @@ package org.zeromem.lifecode.algorithmaction.dynamicprogramming;
  */
 public class _740DeleteAndEarn {
     public static void main(String[] args) {
-
+        _740DeleteAndEarn test = new _740DeleteAndEarn();
+        int[] nums = new int[]{2, 2, 3, 3, 3, 4};
+        System.out.println(test.deleteAndEarn(nums));
     }
 
     public int deleteAndEarn(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        if (nums.length == 2) {
+            if (Math.abs(nums[0] - nums[1]) <= 1) {
+                return Math.max(nums[0], nums[1]);
+            } else {
+                return nums[0] + nums[1];
+            }
+        }
+
         int max = 0;
         int n = nums.length;
         for (int i = 0; i < n; i++) {
@@ -45,11 +61,12 @@ public class _740DeleteAndEarn {
         for (int i = 0; i < n; i++) {
             count[nums[i]]++;
         }
-        int[] mayearn = new int[max + 1];
-        for (int i = 0; i < mayearn.length; i++) {
-//            mayearn[i] =
+        int[] dp = new int[max + 1];
+        dp[1] = count[1];
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = Math.max(dp[i - 2] + count[i] * i, dp[i - 1]);
         }
-        return 0;
+        return dp[max];
     }
 
 }
