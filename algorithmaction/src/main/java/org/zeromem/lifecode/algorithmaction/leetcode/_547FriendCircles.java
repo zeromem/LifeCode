@@ -33,29 +33,20 @@ import java.util.HashSet;
  */
 public class _547FriendCircles {
     public static void main(String[] args) {
-
+        _547FriendCircles test = new _547FriendCircles();
+        int[][] M = new int[][]{{1, 0, 0, 1}, {0, 1, 1, 0}, {0, 1, 1, 1}, {1, 0, 1, 1}};
+        System.out.println(test.findCircleNum(M));
     }
 
     public int findCircleNum(int[][] M) {
-        int n = M.length;
-        int[] root = new int[M.length];
-        Arrays.fill(root, -1);
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+        UnionFind uf = new UnionFind(M.length);
+        for (int i = 0; i < M.length; i++) {
+            for (int j = i + 1; j < M.length; j++) {
                 if (M[i][j] == 1) {
-                    int r = root[i];
-                    while (root[r] > 0) {
-                        r = root[r];
-                    }
-                    root[j] = r;
+                    uf.union(i, j);
                 }
             }
         }
-        HashSet<Integer> roots = new HashSet<>();
-        for (int rt : root) {
-            roots.add(rt);
-        }
-        return roots.size();
+        return uf.getCount();
     }
 }
