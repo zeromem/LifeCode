@@ -22,13 +22,11 @@ public class _739DailyTemperatures {
     public int[] dailyTemperatures(int[] temperatures) {
         int n = temperatures.length;
         int[] res = new int[n];
-        int s = 0;
         for (int i = 0; i < n; i++) {
-            for (int j = s; j < i; j++) {
-                if (temperatures[j] > temperatures[s]) {
-                    res[s] = j - s;
-                    s++;
-                    System.out.println(Arrays.toString(res));
+            for (int j = i + 1; j < n; j++) {
+                if (temperatures[j] > temperatures[i]) {
+                    res[i] = j - i;
+                    break;
                 }
             }
         }

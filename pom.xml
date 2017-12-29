@@ -20,6 +20,7 @@
         <module>algorithmaction</module>
         <module>akka</module>
         <module>bloom</module>
+        <module>scala</module>
     </modules>
     <name>All My Code</name>
 
