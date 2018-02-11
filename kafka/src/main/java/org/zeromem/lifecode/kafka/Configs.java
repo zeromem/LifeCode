@@ -7,6 +7,7 @@ import com.typesafe.config.ConfigParseOptions;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,10 @@ public class Configs {
 
 
 	public static void main(String[] args) {
+        System.out.println(int[].class.getCanonicalName());
+        System.out.println(int[].class.getName());
+        System.out.println(int[].class.getSimpleName());
+
 //		System.out.println(StringDeserializer.class.getName());
 		testLoad();
 	}

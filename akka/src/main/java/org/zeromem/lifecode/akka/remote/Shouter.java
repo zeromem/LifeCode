@@ -4,10 +4,13 @@ import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
+import akka.pattern.Patterns;
 import com.typesafe.config.ConfigFactory;
-import scala.concurrent.duration.Duration;
+import scala.compat.java8.FutureConverters;
+import scala.concurrent.Future;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+
 
 /**
  * @author zeromem
@@ -39,8 +42,27 @@ public class Shouter extends AbstractActor {
 		ActorSystem system = ActorSystem.create("remote", ConfigFactory.load().getConfig("shouter"));
 		ActorRef shouter = system.actorOf(Shouter.props(), "shouter");
 		ActorSelection echo = system.actorSelection("akka.tcp://remote@10.9.54.111:2552/user/echo");
+        Future f = Patterns.ask(echo, "hello", 5000);
+		final CompletionStage<String> cs = FutureConverters.toJava(f);
+        final CompletableFuture<String> future = (CompletableFuture<String>) cs;
+        CompletableFuture<Character> cFuture = future.thenApply(s -> s.charAt(0));
+        cFuture.handle((c, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                System.out.println(c);
+            }
+            return null;
+        });
 
-		Thread.sleep(2000);
+        try {
+            System.out.println(cFuture.get(5000, TimeUnit.SECONDS));
+        } catch (ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+        }
+
+
+        Thread.sleep(2000);
 		echo.tell(new Message("hello world"), shouter);
 	}
 }

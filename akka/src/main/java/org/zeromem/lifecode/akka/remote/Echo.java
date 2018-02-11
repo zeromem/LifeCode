@@ -21,8 +21,12 @@ public class Echo extends AbstractActor {
 	 *
 	 */
 	static public Props props() {
-		return Props.create(Echo.class, Echo::new);
+		return Props.create(Echo.class);
 	}
+
+    static public Props props(String s) {
+        return Props.create(Echo.class, s);
+    }
 
 	@Override
 	public Receive createReceive() {

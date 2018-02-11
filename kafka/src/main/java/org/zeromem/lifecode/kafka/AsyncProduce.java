@@ -1,6 +1,5 @@
 package org.zeromem.lifecode.kafka;
 
-import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
