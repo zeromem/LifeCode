@@ -13,10 +13,6 @@ public class MinHeap {
         build();
     }
 
-    public int[] getHeap() {
-        return heap;
-    }
-
     private void build() {
         for (int i = (heap.length) / 2 - 1; i >= 0; i--) {
             heapify(i);

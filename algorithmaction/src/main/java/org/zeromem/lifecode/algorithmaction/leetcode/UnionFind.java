@@ -6,7 +6,7 @@ package org.zeromem.lifecode.algorithmaction.leetcode;
  * 并查集
  */
 public class UnionFind {
-    private int count = 0;
+    private int groupCount = 0;
     private int[] parent;
 
     public UnionFind(int n) {
@@ -14,7 +14,7 @@ public class UnionFind {
         for (int i = 0; i < n; i++) {
             parent[i] = i;
         }
-        count = n;
+        groupCount = n;
     }
 
     public int find(int x) {
@@ -36,7 +36,7 @@ public class UnionFind {
                 return;
             } else {
                 parent[py] = px;
-                count--;
+                groupCount--;
             }
         }
     }
@@ -48,6 +48,6 @@ public class UnionFind {
     }
 
     public int getCount() {
-        return count;
+        return groupCount;
     }
 }
