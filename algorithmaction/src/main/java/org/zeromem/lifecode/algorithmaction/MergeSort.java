@@ -43,31 +43,6 @@ public class MergeSort {
         }
     }
 
-	public static void main(String[] args) throws IOException {
-        int[] a = new Random().ints(10000000).toArray();
-        int[] mergeArr = Arrays.copyOf(a, a.length);
-        int[] heapArr = Arrays.copyOf(a, a.length);
-        int[] quickArr = Arrays.copyOf(a, a.length);
 
-        long mergeStart = System.currentTimeMillis();
-        mergeSort(a, 0, a.length - 1);
-        System.out.printf("merge sort result %b, cost %d\n", checkSorted(mergeArr), System.currentTimeMillis());
 
-        long heapStart = System.currentTimeMillis();
-        HeapSort.heapSort(heapArr, 0, heapArr.length);
-        System.out.printf("heap sort result %b, cost %d\n", checkSorted(heapArr), System.currentTimeMillis());
-
-        long quickStart = System.currentTimeMillis();
-        QuickSort.quickSort1(quickArr, 0, quickArr.length);
-        System.out.printf("quick sort result %b, cost %d\n", checkSorted(quickArr), System.currentTimeMillis());
-    }
-
-    public static boolean checkSorted(int[] a) {
-        for (int i = 1; i < a.length; i++) {
-            if (a[i] < a[i - 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
