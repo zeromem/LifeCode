@@ -1,5 +1,7 @@
 package org.zeromem.lifecode.algorithmaction.leetcode;
 
+import java.util.*;
+
 /**
  * @author zeromem
  * @date 2018/3/1
@@ -23,6 +25,16 @@ public class _207CourseSchedule {
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < numCourses; i++) {
+            set.add(i);
+        }
+        Map<Integer, List<Integer>> pre = new HashMap<>();
+//        Map<Integer, List<Integer>>
+        for (int[] prerequisite : prerequisites) {
+            pre.putIfAbsent(prerequisite[1], new ArrayList<>());
+            pre.get(prerequisite[1]).add(prerequisite[0]);
+        }
         return false;
     }
 
