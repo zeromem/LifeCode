@@ -22,18 +22,19 @@ public class ThreeSum {
 			return new ArrayList<>();
 		}
 		Arrays.sort(list);
-		process(list, 0, 1, list.length - 1);
+		process(list, 0);
 		for (int i = 1; i < list.length; i++) {
 			if (list[i] == list[i - 1]) {
 				continue;
 			}
-			process(list, i, i + 1, list.length - 1);
+			process(list, i);
 		}
 		return result;
 	}
 
 
-	public static void process(int[] list, int position, int start, int end) {
+	public static void process(int[] list, int position) {
+	    int start = position + 1, end = list.length - 1;
 		int sum = -list[position];
 		while (start < end) {
 			int curSum = list[start] + list[end];

@@ -21,21 +21,49 @@ import java.util.*;
  */
 public class _207CourseSchedule {
     public static void main(String[] args) {
+        _207CourseSchedule test = new _207CourseSchedule();
+        int numCourses = 3;
+        int[][] prerequisites = new int[][]{{1, 0}, {2, 0}};
+        boolean res = test.canFinish(numCourses, prerequisites);
+        System.out.println(res);
 
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        Set<Integer> set = new HashSet<>();
+        Map<Integer, Integer> preCount = new HashMap<>();
         for (int i = 0; i < numCourses; i++) {
-            set.add(i);
+            preCount.put(i, 0);
         }
-        Map<Integer, List<Integer>> pre = new HashMap<>();
-//        Map<Integer, List<Integer>>
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
         for (int[] prerequisite : prerequisites) {
-            pre.putIfAbsent(prerequisite[1], new ArrayList<>());
-            pre.get(prerequisite[1]).add(prerequisite[0]);
+            graph.putIfAbsent(prerequisite[0], new HashSet<>());
+            graph.get(prerequisite[0]).add(prerequisite[1]);
+            Integer count = preCount.get(prerequisite[1]);
+            preCount.put(prerequisite[1], count + 1);
         }
-        return false;
+
+        while (!graph.isEmpty()) {
+            Integer cour = -1;
+            for (Map.Entry<Integer, Integer> entry : preCount.entrySet()) {
+                if (entry.getValue() == 0) {
+                    cour = entry.getKey();
+                    preCount.remove(cour);
+                    break;
+                }
+            }
+            if (cour == -1 && !graph.isEmpty()) {
+                return false;
+            }
+            Set<Integer> children = graph.get(cour);
+            graph.remove(cour);
+            if (children != null) {
+                for (Integer child : children) {
+                    int count = preCount.get(child);
+                    preCount.put(child, count - 1);
+                }
+            }
+        }
+        return true;
     }
 
 }
