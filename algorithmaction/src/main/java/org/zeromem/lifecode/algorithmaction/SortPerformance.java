@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class SortPerformance {
     public static void main(String[] args) throws IOException {
-        int[] a = new Random().ints(10000000).toArray();
+        int[] a = new Random().ints(50000000).toArray();
         int[] mergeArr = Arrays.copyOf(a, a.length);
         int[] heapArr = Arrays.copyOf(a, a.length);
         int[] quickArr = Arrays.copyOf(a, a.length);
