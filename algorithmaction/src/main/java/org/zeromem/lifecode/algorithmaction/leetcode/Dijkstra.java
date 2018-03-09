@@ -12,7 +12,6 @@ public class Dijkstra {
 
     public Map<Integer, Integer> search(int[][] matrix, int src) {
         PriorityQueue<Edge> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.weight));
-        List<int[]> result = new LinkedList<>();
         queue.add(new Edge(src, src, 0));
         Map<Integer, Integer> map = new HashMap<>();
         while (!queue.isEmpty()) {
@@ -41,9 +40,5 @@ class Edge {
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.weight = weight;
-    }
-
-    public int[] toArray() {
-        return new int[]{sourceId, targetId, weight};
     }
 }

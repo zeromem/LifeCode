@@ -35,11 +35,18 @@ public class _30SubstringwithConcatenationofAllWords {
         if (wordsLength > s.length()) {
             return result;
         }
+        Map<String, Integer> wordCount = new HashMap<>();
+        for (String word : words) {
+            Integer count = wordCount.putIfAbsent(word, 1);
+            if (count != null) {
+                wordCount.put(word, count + 1);
+            }
+        }
 
         int endPos = s.length() - wordsLength;
-        boolean[] wordVisited = new boolean[words.length];
         for (int i = 0; i <= endPos; i++) {
-            if (match(s, i, words, Arrays.copyOf(wordVisited, wordVisited.length))) {
+            Map<String, Integer> copy = new HashMap<>(wordCount);
+            if (match(s, i, copy)) {
                 result.add(i);
             }
         }
@@ -47,30 +54,22 @@ public class _30SubstringwithConcatenationofAllWords {
 
     }
 
-    public static boolean match(String s, int i, String[] words, boolean[] visited) {
-        for (int j = 0; j < words.length; j++) {
-            if (visited[j]) {
-                continue;
-            }
-            String word = words[j];
+    public static boolean match(String s, int i, Map<String, Integer> wordCount) {
+        for (String word : wordCount.keySet()) {
             if (s.startsWith(word, i)) {
-                visited[j] = true;
-                if (allVisited(visited)) {
+                int count = wordCount.get(word);
+                if (count == 1) {
+                    wordCount.remove(word);
+                } else {
+                    wordCount.put(word, count - 1);
+                }
+                if (wordCount.isEmpty()) {
                     return true;
                 } else {
-                    return match(s, i + word.length(), words, visited);
+                    return match(s, i + word.length(), wordCount);
                 }
             }
         }
         return false;
-    }
-
-    public static boolean allVisited(boolean[] visited) {
-        for (boolean b : visited) {
-            if (!b) {
-                return false;
-            }
-        }
-        return true;
     }
 }
