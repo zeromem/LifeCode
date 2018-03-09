@@ -1,5 +1,6 @@
 package org.zeromem.lifecode.algorithmaction.july;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Random;
  */
 public class HeapSort {
     public static void main(String[] args) {
-        int[] a = new Random().ints(100000, 0, 1000000).toArray();
+        int[] a = new Random().ints(10000000, 0, 1000).toArray();
         long s = System.currentTimeMillis();
         heapSort(a, 0, a.length - 1);
         System.out.println(System.currentTimeMillis() - s);
@@ -25,30 +26,31 @@ public class HeapSort {
     }
 
     public static void heapSort(int[] a, int start, int end) {
-        for (int i = start; i <= end; i++) {
-            int mid = (i + end) >> 1;
-            for (int j = mid; j >= i; j--) {
-                heapify(a, i, end, j);
-            }
+        for (int i = (start + end) / 2; i >= start; i--) {
+            heapify(a, start, end, i);
+        }
+        for (int i = end; i > start; i--) {
+            swap(a, start, i);
+            heapify(a, start, i - 1, start);
         }
     }
 
     public static void heapify(int[] a, int start, int end, int i) {
-        int smallest = i;
+        int biggest = i;
         int left = left(start, i);
         int right = right(start, i);
 
-        if (left <= end && a[left] < a[smallest]) {
-            smallest = left;
+        if (left <= end && a[left] > a[biggest]) {
+            biggest = left;
         }
 
-        if (right <= end && a[right] < a[smallest]) {
-            smallest = right;
+        if (right <= end && a[right] > a[biggest]) {
+            biggest = right;
         }
 
-        if (smallest != i) {
-            swap(a, i, smallest);
-            heapify(a, start, end, smallest);
+        if (biggest != i) {
+            swap(a, i, biggest);
+            heapify(a, start, end, biggest);
         }
     }
 
