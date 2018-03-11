@@ -34,10 +34,9 @@ public class UnionFind {
             int py = find(y);
             if (px == py) {
                 return;
-            } else {
-                parent[py] = px;
-                groupCount--;
             }
+            parent[py] = px;
+            groupCount--;
         }
     }
 
