@@ -28,12 +28,15 @@ package org.zeromem.lifecode.algorithmaction.leetcode;
 public class _402RemoveKDigits {
     public static void main(String[] args) {
         _402RemoveKDigits test = new _402RemoveKDigits();
-        String num = "10";
+        String num = "1432219";
         String res = test.removeKdigits(num, 3);
         System.out.println(res);
     }
 
     public String removeKdigits(String num, int k) {
+        if (k == 0) {
+            return num;
+        }
         int n = num.length();
         int len = n - k;
         if (len <= 0) {
@@ -48,9 +51,15 @@ public class _402RemoveKDigits {
                 top--;
                 k--;
             }
-            stack[++top] = (char) c;
+            stack[++top] = c;
         }
-        int min = Integer.valueOf(new String(stack, 0, len), 10);
-        return String.valueOf(min);
+        int firstNonZeroPos = 0;
+        while (firstNonZeroPos < len && stack[firstNonZeroPos] == '0') {
+            firstNonZeroPos++;
+        }
+        if (firstNonZeroPos == len) {
+            return "0";
+        }
+        return new String(stack, firstNonZeroPos, len - firstNonZeroPos);
     }
 }
