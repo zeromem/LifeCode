@@ -21,6 +21,7 @@
         <module>akka</module>
         <module>bloom</module>
         <module>scala</module>
+        <module>xml2docx</module>
     </modules>
     <name>All My Code</name>
 
