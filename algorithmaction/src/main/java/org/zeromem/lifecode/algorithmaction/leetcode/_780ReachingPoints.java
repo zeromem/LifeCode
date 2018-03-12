@@ -32,6 +32,6 @@ public class _780ReachingPoints {
     }
 
     public boolean reachingPoints(int sx, int sy, int tx, int ty) {
-
+        return false;
     }
 }
