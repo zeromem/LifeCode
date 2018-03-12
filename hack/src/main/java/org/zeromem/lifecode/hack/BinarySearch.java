@@ -1,5 +1,7 @@
 package org.zeromem.lifecode.hack;
 
+import java.util.Arrays;
+
 /**
  * Created by zeromem on 2017/9/8.
  */
