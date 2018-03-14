@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.zeromem.lifecode.bloom;
+package org.zeromem.lifecode.hack.bloom;
 
 /**
  * 32-bit Murmur3 hasher.  This is based on Guava's Murmur3_32HashFunction.

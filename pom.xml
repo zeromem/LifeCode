@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>langspec</module>
         <module>blockchain</module>
         <module>hack</module>
         <module>kafka</module>
@@ -19,7 +18,6 @@
         <module>paxos</module>
         <module>algorithmaction</module>
         <module>akka</module>
-        <module>bloom</module>
         <module>scala</module>
         <module>xml2docx</module>
     </modules>

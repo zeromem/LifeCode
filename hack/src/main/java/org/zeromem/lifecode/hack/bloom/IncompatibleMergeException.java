@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.zeromem.lifecode.bloom;
+package org.zeromem.lifecode.hack.bloom;
 
 public class IncompatibleMergeException extends Exception {
   public IncompatibleMergeException(String message) {

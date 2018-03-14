@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.zeromem.lifecode.bloom;
+package org.zeromem.lifecode.hack.bloom;
 
 import sun.misc.Unsafe;
 
