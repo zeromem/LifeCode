@@ -6,10 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.Serializer;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static org.zeromem.lifecode.kafka.Configs.kafkaConfig;
@@ -21,36 +18,24 @@ public class JsonProduceDemo {
 	public static void main(String[] args) throws ExecutionException, InterruptedException {
 		// 创建producer
 		HashMap<String, Object> config = new HashMap<>(kafkaConfig);
-		config.put("value.serializer", "org.zeromem.lifecode.kafka.JsonProduceDemo$JsonSerializer");
-		KafkaProducer<String, JSONObject> producer = new KafkaProducer<>(config);
+		config.put("value.serializer", "org.zeromem.lifecode.kafka.JsonProduceDemo$PersonJsonSer");
+		KafkaProducer<String, Person> producer = new KafkaProducer<>(config);
 
-		for (int id = 0; id < 10; id++) {
-			JSONObject object = new JSONObject();
-			String name = "Customer" + id;
-
-			// 生成json实例
-			object.put("id", id);
-			object.put("name", name);
-
-			if (id % 2 == 0) {
-				List<String> history = new LinkedList<>();
-				history.add(id + "O");
-				history.add(id + "P");
-				history.add(id + "Q");
-				object.put("history", history);
-			}
-
-			System.out.println(object);
+		for (int age = 20; age < 35; age++) {
+			Person person = new Person("zero", age);
+			person.setInfo(String.valueOf(new Random().nextDouble()));
 
 			// 用实例生成一条ProducerRecord
-			ProducerRecord<String, JSONObject> data = new ProducerRecord<>("customer", name, object);
+			ProducerRecord<String, Person> data =
+                    new ProducerRecord<>("test", person.name, person);
+            System.out.println(person);
 
 			// 发送
 			producer.send(data).get();
 		}
 	}
 
-	public static class JsonSerializer implements Serializer<JSONObject> {
+	public static class PersonJsonSer implements Serializer<Person> {
 
 		@Override
 		public void configure(Map<String, ?> configs, boolean isKey) {
@@ -58,7 +43,7 @@ public class JsonProduceDemo {
 		}
 
 		@Override
-		public byte[] serialize(String topic, JSONObject data) {
+		public byte[] serialize(String topic, Person data) {
 			return JSON.toJSONBytes(data);
 		}
 
@@ -67,6 +52,5 @@ public class JsonProduceDemo {
 
 		}
 	}
-
 }
 
