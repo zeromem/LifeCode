@@ -40,22 +40,6 @@ public class _55ArrayJumpGame {
                 return true;
             }
         }
-        boolean[] can = new boolean[nums.length];
-        can[n - 1] = true;
-
-        for (int i = n - 2; i >= 0; i--) {
-            int j = i + nums[i];
-            if (j > n - 1) {
-                j = n - 1;
-            }
-            for (;j > i; j--) {
-                if (can[j]) {
-                    can[i] = true;
-                    break;
-                }
-            }
-        }
-
-        return can[0];
+        return remainSteps >= 0;
     }
 }
