@@ -30,6 +30,7 @@ public class JsonConsumeDemo {
                 System.out.print("woo - ");
 				System.out.println(record.value());
 			}
+			consumer.commitSync();
 		}
 
 	}
