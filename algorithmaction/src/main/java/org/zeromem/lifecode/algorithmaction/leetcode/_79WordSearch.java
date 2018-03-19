@@ -24,14 +24,14 @@ import java.util.*;
 public class _79WordSearch {
     public static void main(String[] args) {
         _79WordSearch test = new _79WordSearch();
-        char[][] board = new char[][]{{'a', 'b'}};
-        String word = "ba";
+        char[][] board = new char[][]{{'a', 'a'}};
+        String word = "aaa";
         System.out.println(test.exist(board, word));
     }
     public boolean exist(char[][] board, String word) {
-        if (board == null || word == null || board.length * board[0].length < word.length()) {
-            return false;
-        }
+        // if (board == null || word == null || board.length * board[0].length < word.length()) {
+        //     return false;
+        // }
 
         char[] target = word.toCharArray();
         boolean[][] visited = new boolean[board.length][board[0].length];
@@ -57,6 +57,7 @@ public class _79WordSearch {
      * @param pos
      * @return
      */
+    @SuppressWarnings("Duplicates")
     public static boolean dfs(char[][] board, boolean[][] visited,
                               int i, int j, char[] target, int pos) {
         // 搜索比较到了第pos个字符，说明全部比较完毕

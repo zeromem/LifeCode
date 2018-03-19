@@ -1,17 +1,12 @@
 package org.zeromem.lifecode.kafka.streams;
 
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.state.KeyValueStore;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.zeromem.lifecode.kafka.streams.thrift.StreamsWordCountRPCServer;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -42,7 +37,7 @@ public class KafkaStreamsInstance {
         // topology.describe();
 
         // run topology
-        KafkaStreams streams = new KafkaStreams(topology, props);
+        final KafkaStreams streams = new KafkaStreams(topology, props);
         streams.cleanUp();
         streams.start();
 
@@ -52,6 +47,7 @@ public class KafkaStreamsInstance {
 
         TimeUnit.MINUTES.sleep(10);
         streams.close();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> streams.close()));
         System.exit(1);
     }
 }
