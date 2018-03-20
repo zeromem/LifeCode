@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Knapsack {
     public static void main(String[] args) {
         Knapsack test = new Knapsack();
-        int capacity = 10;
+        int capacity = 8;
         int[] volume = new int[]{4, 3, 5, 2, 5};
         int[] weight = new int[]{9, 6, 1, 4, 1};
         System.out.println(test.knapsack(capacity, volume, weight));
@@ -26,20 +26,17 @@ public class Knapsack {
     }
 
     public int knapsack(int capacity, int[] volume, int[] weight) {
-        // dp[i][j]: 前i个宝石，剩余容量为j时的最优选择
         int n = volume.length;
+        // dp[i][j]: 前i个宝石，剩余容量为j时的最优选择
         int[][] dp = new int[n + 1][capacity + 1];
-//        for (int i = 0; i < n + 1; i++) {
-//            dp[i][0] = 0;
-//        }
-        for (int j = 0; j < capacity + 1; j++) {
-            dp[0][j] = 0;
-        }
+
         for (int i = 1; i < n + 1; i++) {
             for (int j = 0; j < capacity + 1; j++) {
-                if (j >= volume[i - 1] && dp[i - 1][j - volume[i - 1]] + weight[i - 1] > dp[i - 1][j]) {
-                    dp[i][j] = dp[i - 1][j - volume[i - 1]] + weight[i - 1];
+                if (j >= volume[i - 1]) {
+                    // 选第i个宝石
+                    dp[i][j] = Math.max(dp[i - 1][j - volume[i - 1]] + weight[i - 1], dp[i - 1][j]);
                 } else {
+                    // 不选第i个宝石
                     dp[i][j] = dp[i - 1][j];
                 }
             }
@@ -56,7 +53,7 @@ public class Knapsack {
                 c -= volume[i - 1];
             }
         }
-        System.out.println(Arrays.toString(selected));
+        // System.out.println(Arrays.toString(selected));
         return dp[n][capacity];
     }
 }

@@ -12,9 +12,9 @@ import static org.zeromem.lifecode.algorithmaction.leetcode.ListNode.printListNo
  * <p>
  * Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.
  */
-public class _62SwapNodesinPairs {
+public class _24SwapNodesinPairs {
     public static void main(String[] args) {
-        _62SwapNodesinPairs test = new _62SwapNodesinPairs();
+        _24SwapNodesinPairs test = new _24SwapNodesinPairs();
 
         ListNode head = new ListNode(1);
         head.next = new ListNode(2);

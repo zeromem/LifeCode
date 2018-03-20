@@ -26,19 +26,23 @@ public class _105ConstructBinaryTreefromPreorderandInorderTraversal {
     }
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-
+        return build(preorder, 0, inorder, 0, inorder.length - 1);
     }
 
-    public static TreeNode build(int[] preorder, int rootPos, int[] inorder, int inStart, int inEnd) {
-        if (inStart > inEnd) {
+    public static TreeNode build(int[] preorder, int preStart, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preorder.length - 1 || inStart > inEnd) {
             return null;
         }
-        int rootVal = preorder[rootPos];
-
-        for (int i = inStart; i < inEnd; i++) {
-            if (inorder[i] == rootVal) {
-
+        int rootVal = preorder[preStart];
+        int inRootPos = inStart;
+        for (; inRootPos < inEnd; inRootPos++) {
+            if (inorder[inRootPos] == rootVal) {
+                break;
             }
         }
+        TreeNode root = new TreeNode(rootVal);
+        root.left = build(preorder, preStart + 1, inorder, inStart, inRootPos - 1);
+        root.right = build(preorder, preStart + inRootPos - inStart + 1, inorder, inRootPos + 1, inEnd);
+        return root;
     }
 }

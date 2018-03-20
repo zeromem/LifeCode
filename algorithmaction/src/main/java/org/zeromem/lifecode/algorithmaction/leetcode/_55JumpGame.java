@@ -10,9 +10,9 @@ package org.zeromem.lifecode.algorithmaction.leetcode;
  * A = [2,3,1,1,4], return true.
  * A = [3,2,1,0,4], return false.
  */
-public class _55ArrayJumpGame {
+public class _55JumpGame {
     public static void main(String[] args) {
-        _55ArrayJumpGame test = new _55ArrayJumpGame();
+        _55JumpGame test = new _55JumpGame();
         int[] a = new int[]{2, 3, 1, 1, 4};
         int[] b = new int[]{3, 2, 1, 0, 4};
         int[] c = new int[]{2, 0};
@@ -40,6 +40,6 @@ public class _55ArrayJumpGame {
                 return true;
             }
         }
-        return remainSteps >= 0;
+        return true;
     }
 }

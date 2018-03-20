@@ -44,7 +44,7 @@ public class _212WordSearchII {
         for (String word : words) {
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board[0].length; j++) {
-                    if (dfs(board, visited, i, j, word.toCharArray(), 0)) {
+                    if (bfs(board, visited, i, j, word.toCharArray(), 0)) {
                         result.add(word);
                     }
                 }
@@ -54,7 +54,7 @@ public class _212WordSearchII {
     }
 
     @SuppressWarnings("Duplicates")
-    public static boolean dfs(char[][] board, boolean[][] visited,
+    public static boolean bfs(char[][] board, boolean[][] visited,
                               int i, int j, char[] target, int pos) {
         if (pos == target.length) {
             return true;
@@ -69,10 +69,10 @@ public class _212WordSearchII {
             return false;
         }
         visited[i][j] = true;
-        boolean exist = dfs(board, visited, i - 1, j, target, pos + 1)
-                || dfs(board, visited, i + 1, j, target, pos + 1)
-                || dfs(board, visited, i, j - 1, target, pos + 1)
-                || dfs(board, visited, i, j + 1, target, pos + 1);
+        boolean exist = bfs(board, visited, i - 1, j, target, pos + 1)
+                || bfs(board, visited, i + 1, j, target, pos + 1)
+                || bfs(board, visited, i, j - 1, target, pos + 1)
+                || bfs(board, visited, i, j + 1, target, pos + 1);
         visited[i][j] = false;
         return exist;
     }
