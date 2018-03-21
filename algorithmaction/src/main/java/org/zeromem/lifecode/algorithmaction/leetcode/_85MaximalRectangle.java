@@ -1,4 +1,4 @@
-package org.zeromem.lifecode.algorithmaction.dynamicprogramming;
+package org.zeromem.lifecode.algorithmaction.leetcode;
 
 /**
  * @author zeromem

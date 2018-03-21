@@ -1,10 +1,4 @@
-package org.zeromem.lifecode.algorithmaction.dynamicprogramming;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONCreator;
-
-import java.util.HashMap;
+package org.zeromem.lifecode.algorithmaction.leetcode;
 
 /**
  * @author zeromem

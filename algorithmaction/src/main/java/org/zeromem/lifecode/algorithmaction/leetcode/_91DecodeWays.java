@@ -1,6 +1,4 @@
-package org.zeromem.lifecode.algorithmaction.dynamicprogramming;
-
-import java.util.Arrays;
+package org.zeromem.lifecode.algorithmaction.leetcode;
 
 /**
  * @author zeromem

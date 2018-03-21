@@ -1,4 +1,4 @@
-package org.zeromem.lifecode.algorithmaction.dynamicprogramming;
+package org.zeromem.lifecode.algorithmaction.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
