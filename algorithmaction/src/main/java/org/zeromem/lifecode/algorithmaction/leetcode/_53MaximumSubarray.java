@@ -7,6 +7,9 @@ package org.zeromem.lifecode.algorithmaction.leetcode;
  * <p>
  * For example, given the array [-2,1,-3,4,-1,2,1,-5,4],
  * the contiguous subarray [4,-1,2,1] has the largest sum = 6.
+ * dp[i]表示以第i个元素为结尾的最大子数组。则有两种赋值情况
+ * a. dp[i - 1] <  0,则不应将前面的任何子数组相连（因为以i-1结尾的最大和也是负数）
+ * b. dp[i - 1] >= 0,可以连接以i-1为结尾的最大子数组，且dp[i] = nums[i] + dp[i - 1]
  */
 public class _53MaximumSubarray {
     public static void main(String[] args) {
