@@ -42,7 +42,6 @@ public class _15_3Sum {
                 result.add(Arrays.asList(list[pos], list[l], list[h]));
                 while (l < h && list[l] == list[++l]);
                 while (l < h && list[h] == list[--h]);
-
             } else if (sum > target) {
                 h--;
             } else {
