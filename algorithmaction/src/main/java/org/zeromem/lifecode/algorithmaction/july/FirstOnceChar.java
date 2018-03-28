@@ -7,7 +7,7 @@ package org.zeromem.lifecode.algorithmaction.july;
 public class FirstOnceChar {
     public static void main(String[] args) {
         FirstOnceChar test = new FirstOnceChar();
-        String s = "abaccffb";
+        String s = "abaccffbd";
         System.out.println(test.firstOnceChar(s));
     }
 

@@ -1,9 +1,13 @@
 package org.zeromem.lifecode.algorithmaction.leetcode;
 
+import java.util.Arrays;
+
 /**
  * @author zeromem
  * @date 2018/3/22
- * Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+ * Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive),
+ * prove that at least one duplicate number must exist.
+ * Assume that there is only one duplicate number, find the duplicate one.
  * <p>
  * Note:
  * You must not modify the array (assume the array is read only).
@@ -17,10 +21,15 @@ public class _287FindtheDuplicateNumber {
     }
 
     public int findDuplicate(int[] nums) {
-        int result = 0;
-        for (int num : nums) {
-            result ^= num;
+        if (nums == null) {
+            return -1;
         }
-        return result;
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
+                return nums[i];
+            }
+        }
+        return -1;
     }
 }

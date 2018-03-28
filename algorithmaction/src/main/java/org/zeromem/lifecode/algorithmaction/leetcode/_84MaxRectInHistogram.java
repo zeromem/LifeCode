@@ -31,9 +31,6 @@ public class _84MaxRectInHistogram {
 
 			// 从波峰向前扫描到j=0，更新res
 			res = res > heights[i] ? res : heights[i];
-			if (heights[i] > res) {
-				res = heights[i];
-			}
 			int minHeight = heights[i];
 			for (int j = i - 1; j >= 0; j--) {
 				if (heights[j] < minHeight) {
