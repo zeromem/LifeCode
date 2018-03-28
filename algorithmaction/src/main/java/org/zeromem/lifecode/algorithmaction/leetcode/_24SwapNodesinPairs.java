@@ -31,7 +31,7 @@ public class _24SwapNodesinPairs {
 
         ListNode a = head;
         ListNode b = head.next;
-        a.next = b.next;
+        a.next = b.next; // 必须要有这句话，因为还需要递归处理a.next
         b.next = a;
         a.next = swapPairs(a.next);
         return b;

@@ -59,6 +59,5 @@ public class _5LongestPalindromicSubstring {
             }
         }
         return new String(cs, l, r - l + 1);
-
     }
 }

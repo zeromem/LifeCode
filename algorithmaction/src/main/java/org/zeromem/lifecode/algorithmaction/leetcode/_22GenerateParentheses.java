@@ -14,6 +14,7 @@ public class _22GenerateParentheses {
     }
 
     public List<String> generateParenthesis(int n) {
+        // TODO: 2018/3/24 算法还有问题
         List<String> result = new LinkedList<>();
         if (n == 0) {
             return result;
