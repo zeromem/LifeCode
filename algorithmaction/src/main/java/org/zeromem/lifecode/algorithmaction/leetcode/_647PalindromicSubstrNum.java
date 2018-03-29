@@ -20,10 +20,39 @@ package org.zeromem.lifecode.algorithmaction.leetcode;
  */
 public class _647PalindromicSubstrNum {
     public static void main(String[] args) {
-
+        _647PalindromicSubstrNum test = new _647PalindromicSubstrNum();
+        String s = "aaa";
+        System.out.println(test.countSubstrings(s));
     }
 
     public int countSubstrings(String s) {
-        return 0;
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        if (s.length() == 1) {
+            return 1;
+        }
+        int result = 0;
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            // s[i] as the center char
+            int left = i - 1;
+            int right = i + 1;
+            while (left >= 0 && right < len && s.charAt(left) == s.charAt(right)) {
+                result++;
+                left--;
+                right++;
+            }
+
+            // s[i] as the first left char
+            left = i;
+            right = i + 1;
+            while (left >= 0 && right < len && s.charAt(left) == s.charAt(right)) {
+                    result++;
+                    left--;
+                    right++;
+            }
+        }
+        return result;
     }
 }
