@@ -36,6 +36,7 @@ public class _647PalindromicSubstrNum {
         int len = s.length();
         for (int i = 0; i < len; i++) {
             // s[i] as the center char
+            result++;
             int left = i - 1;
             int right = i + 1;
             while (left >= 0 && right < len && s.charAt(left) == s.charAt(right)) {

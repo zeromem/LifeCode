@@ -14,12 +14,12 @@
         <module>kafka</module>
         <module>hadoop</module>
         <module>mongo</module>
-        <module>jdksource</module>
         <module>paxos</module>
         <module>algorithmaction</module>
         <module>akka</module>
         <module>scala</module>
         <module>xml2docx</module>
+        <module>springmvc-quickstart</module>
     </modules>
     <name>All My Code</name>
 
